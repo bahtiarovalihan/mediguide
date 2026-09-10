@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediGuide — медицинский помощник</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f9fc;
+            color: #14212b;
+            line-height: 1.6;
+            transition: 0.3s;
+        }
+
+        body.dark {
+            background: #0d1720;
+            color: #f1f5f9;
+        }
+
+        /* HEADER */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid #e5edf2;
+        }
+
+        body.dark header {
+            background: rgba(13, 23, 32, 0.9);
+            border-color: #243746;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 18px 25px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #0b8f7c;
+        }
+
+        .logo span {
+            color: #1b5f91;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #0b8f7c;
+        }
+
+        .theme-btn {
+            border: none;
+            background: #e8f7f4;
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+            font-size: 19px;
+        }
+
+        body.dark .theme-btn {
+            background: #1d303e;
+        }
+
+        /* HERO */
+
+        .hero {
+            max-width: 1200px;
+            margin: auto;
+
+            min-height: 680px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            align-items: center;
+
+            gap: 60px;
+            padding: 70px 25px;
+        }
+
+        .badge {
+            display: inline-block;
+
+            background: #e5f8f4;
+            color: #087c6d;
+
+            padding: 8px 15px;
+            border-radius: 30px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+        body.dark .badge {
+            background: #163a38;
+            color: #70e0d0;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 5vw, 68px);
+            line-height: 1.05;
+
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: #0b9b86;
+        }
+
+        .hero-text {
+            font-size: 18px;
+            color: #647482;
+
+            margin-bottom: 30px;
+
+            max-width: 600px;
+        }
+
+        body.dark .hero-text {
+            color: #a9b7c2;
+        }
+
+        /* INPUT */
+
+        .input-card {
+            background: white;
+
+            border-radius: 25px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 15px 50px rgba(19, 62, 81, 0.10);
+        }
+
+        body.dark .input-card {
+            background: #14232e;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+
+            resize: vertical;
+
+            border: 2px solid #e5edf2;
+            border-radius: 18px;
+
+            padding: 18px;
+
+            font-size: 16px;
+            font-family: inherit;
+
+            outline: none;
+
+            background: white;
+            color: #14212b;
+        }
+
+        body.dark textarea {
+            background: #0f1d27;
+            color: white;
+            border-color: #2a3d4a;
+        }
+
+        textarea:focus {
+            border-color: #0b9b86;
+        }
+
+        .quick-title {
+            margin-top: 18px;
+            margin-bottom: 10px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            color: #667784;
+        }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            border: 1px solid #dce8ed;
+            background: #f8fbfc;
+
+            padding: 9px 13px;
+
+            border-radius: 30px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+
+            border-color: #0b9b86;
+            color: #0b8f7c;
+        }
+
+        body.dark .quick-btn {
+            background: #1b2b36;
+            color: white;
+            border-color: #304551;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+
+            margin-top: 18px;
+        }
+
+        .main-btn {
+            flex: 1;
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b9b86,
+                    #087b91
+                );
+
+            color: white;
+
+            padding: 15px 25px;
+
+            border-radius: 15px;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(
+                    11,
+                    155,
+                    134,
+                    0.25
+                );
+        }
+
+        .secondary-btn {
+            border: 1px solid #d9e5eb;
+            background: white;
+
+            padding: 15px 20px;
+
+            border-radius: 15px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+        }
+
+        body.dark .secondary-btn {
+            background: #1b2b36;
+            color: white;
+            border-color: #304551;
+        }
+
+        /* ILLUSTRATION */
+
+        .illustration {
+            height: 500px;
+
+            border-radius: 40px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #dff7f4,
+                    #e8f1fb
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        body.dark .illustration {
+            background:
+                linear-gradient(
+                    145deg,
+                    #143532,
+                    #152c3b
+                );
+        }
+
+        .doctor {
+            width: 190px;
+            height: 250px;
+
+            background: white;
+
+            border-radius:
+                90px 90px 35px 35px;
+
+            position: relative;
+
+            box-shadow:
+                0 20px 40px rgba(
+                    0,
+                    0,
+                    0,
+                    0.12
+                );
+        }
+
+        .doctor::before {
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+            height: 90px;
+
+            background: #f1c7a7;
+
+            border-radius: 50%;
+
+            top: -65px;
+            left: 50px;
+        }
+
+        .doctor::after {
+            content: "✚";
+
+            position: absolute;
+
+            font-size: 70px;
+
+            color: #0b9b86;
+
+            top: 75px;
+            left: 58px;
+        }
+
+        .float-icon {
+            position: absolute;
+
+            width: 70px;
+            height: 70px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            box-shadow:
+                0 15px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    0.1
+                );
+
+            animation:
+                float 4s ease-in-out infinite;
+        }
+
+        body.dark .float-icon {
+            background: #20333f;
+        }
+
+        .icon1 {
+            top: 60px;
+            left: 50px;
+        }
+
+        .icon2 {
+            right: 60px;
+            top: 120px;
+
+            animation-delay: 1s;
+        }
+
+        .icon3 {
+            bottom: 80px;
+            left: 70px;
+
+            animation-delay: 2s;
+        }
+
+        .icon4 {
+            right: 70px;
+            bottom: 60px;
+
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* RESULT */
+
+        #result {
+            max-width: 1200px;
+            margin: -20px auto 70px;
+
+            padding: 0 25px;
+        }
+
+        .result-box {
+            background: white;
+
+            border-radius: 25px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 15px 40px rgba(
+                    19,
+                    62,
+                    81,
+                    0.08
+                );
+
+            animation: appear 0.4s ease;
+        }
+
+        body.dark .result-box {
+            background: #14232e;
+        }
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+        .result-header h2 {
+            margin-bottom: 8px;
+        }
+
+        .demo-label {
+            display: inline-block;
+
+            background: #fff3cd;
+            color: #806000;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .matched-list {
+            margin-top: 20px;
+
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+        .matched-item {
+            background: #edf8f6;
+            color: #087c6d;
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        body.dark .matched-item {
+            background: #163a38;
+            color: #80dfd2;
+        }
+
+        .warning {
+            margin-top: 25px;
+
+            background: #fff7e5;
+
+            border-left: 5px solid #e7a928;
+
+            padding: 18px;
+
+            border-radius: 12px;
+        }
+
+        body.dark .warning {
+            background: #382f1b;
+        }
+
+        /* EMERGENCY */
+
+        .emergency {
+            max-width: 1200px;
+
+            margin: 0 auto 80px;
+
+            padding: 0 25px;
+        }
+
+        .emergency-card {
+            background: #fff0f0;
+
+            border: 1px solid #ffd4d4;
+
+            border-radius: 25px;
+
+            padding: 30px;
+        }
+
+        body.dark .emergency-card {
+            background: #341d21;
+            border-color: #543035;
+        }
+
+        .emergency-card h2 {
+            color: #c73636;
+
+            margin-bottom: 15px;
+        }
+
+        .emergency-card ul {
+            margin-left: 20px;
+        }
+
+        /* SECTIONS */
+
+        .section {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 80px 25px;
+        }
+
+        .section-title {
+            text-align: center;
+
+            font-size: 38px;
+
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+
+            color: #71818d;
+
+            max-width: 650px;
+
+            margin:
+                0 auto 45px;
+        }
+
+        body.dark .section-subtitle {
+            color: #aab8c2;
+        }
+
+        /* STEPS */
+
+        .steps {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+        .step {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+        }
+
+        body.dark .step {
+            background: #14232e;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 15px;
+
+            background: #e4f7f4;
+            color: #0b8f7c;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: 800;
+
+            margin-bottom: 20px;
+        }
+
+        /* MEDICINES */
+
+        .medicine-search {
+            display: flex;
+
+            gap: 10px;
+
+            max-width: 650px;
+
+            margin:
+                0 auto 30px;
+        }
+
+        .medicine-search input {
+            flex: 1;
+
+            padding: 16px;
+
+            border-radius: 15px;
+
+            border:
+                2px solid #e1e9ee;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        body.dark .medicine-search input {
+            background: #14232e;
+
+            color: white;
+
+            border-color: #304551;
+        }
+
+        .medicine-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .medicine-card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 10px 30px rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        body.dark .medicine-card {
+            background: #14232e;
+        }
+
+        .medicine-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .medicine-icon {
+            font-size: 35px;
+
+            margin-bottom: 10px;
+        }
+
+        .medicine-card h3 {
+            margin-bottom: 8px;
+        }
+
+        /* FEATURES */
+
+        .features {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .feature {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 22px;
+        }
+
+        body.dark .feature {
+            background: #14232e;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+
+            margin-bottom: 12px;
+        }
+
+        /* PRIVACY */
+
+        .privacy {
+            background: #eaf8f6;
+
+            border-radius: 30px;
+
+            padding: 35px;
+
+            text-align: center;
+        }
+
+        body.dark .privacy {
+            background: #143331;
+        }
+
+        .privacy h2 {
+            margin-bottom: 10px;
+        }
+
+        /* HISTORY */
+
+        .history {
+            max-width: 800px;
+
+            margin: auto;
+        }
+
+        .history-item {
+            background: white;
+
+            padding: 18px 20px;
+
+            border-radius: 18px;
+
+            margin-bottom: 12px;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+        }
+
+        body.dark .history-item {
+            background: #14232e;
+        }
+
+        .history-item small {
+            color: #81909a;
+        }
+
+        .clear-history {
+            display: block;
+
+            margin:
+                25px auto 0;
+
+            border: none;
+
+            background: #ffe9e9;
+
+            color: #c73636;
+
+            padding: 11px 18px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+        }
+
+        /* FAQ */
+
+        .faq {
+            max-width: 800px;
+
+            margin: auto;
+        }
+
+        .faq-item {
+            background: white;
+
+            border-radius: 15px;
+
+            margin-bottom: 10px;
+
+            overflow: hidden;
+        }
+
+        body.dark .faq-item {
+            background: #14232e;
+        }
+
+        .faq-question {
+            padding: 20px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+        }
+
+        .faq-answer {
+            display: none;
+
+            padding:
+                0 20px 20px;
+
+            color: #71818d;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, 0.55);
+
+            z-index: 2000;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+
+            max-width: 550px;
+
+            width: 100%;
+
+            padding: 30px;
+
+            border-radius: 25px;
+
+            position: relative;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+        }
+
+        body.dark .modal-content {
+            background: #14232e;
+        }
+
+        .close {
+            position: absolute;
+
+            right: 20px;
+            top: 15px;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 50px;
+
+            background: #10212b;
+
+            color: white;
+
+            padding: 50px 25px;
+
+            text-align: center;
+        }
+
+        footer .logo {
+            margin-bottom: 10px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            nav a {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+
+                padding-top: 45px;
+            }
+
+            .illustration {
+                height: 350px;
+            }
+
+            .steps,
+            .features,
+            .medicine-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 30px;
+            }
+
+            .history-item {
+                flex-direction: column;
+
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="header-inner">
+
+            <div class="logo">
+                Medi<span>Guide</span>
+            </div>
+
+            <nav>
+
+                <a href="#home">
+                    Главная
+                </a>
+
+                <a href="#medicines">
+                    Лекарства
+                </a>
+
+                <a href="#how">
+                    Как работает
+                </a>
+
+                <a href="#history">
+                    История
+                </a>
+
+            </nav>
+
+            <button
+                class="theme-btn"
+                onclick="toggleTheme()"
+                id="themeButton"
+            >
+                🌙
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO -->
+
+    <section
+        class="hero"
+        id="home"
+    >
+
+        <div>
+
+            <div class="badge">
+                🧪 MEDIGUIDE DEMO
+            </div>
+
+            <h1>
+
+                Заботьтесь о здоровье
+                <span>
+                    осознанно.
+                </span>
+
+            </h1>
+
+            <p class="hero-text">
+
+                Опишите свои симптомы и получите
+                информационную категорию,
+                полезные сведения и общую
+                информацию о возможных средствах.
+
+            </p>
+
+
+            <div class="input-card">
+
+                <textarea
+                    id="symptoms"
+                    placeholder="Например: насморк, чихание, зуд в глазах..."
+                ></textarea>
+
+
+                <div class="quick-title">
+                    Быстрые симптомы:
+                </div>
+
+
+                <div class="quick-buttons">
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('насморк')"
+                    >
+                        🤧 Насморк
+                    </button>
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('температура')"
+                    >
+                        🤒 Температура
+                    </button>
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('болит голова')"
+                    >
+                        🤕 Головная боль
+                    </button>
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('кашель')"
+                    >
+                        😷 Кашель
+                    </button>
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('тошнота')"
+                    >
+                        🤢 Тошнота
+                    </button>
+
+                    <button
+                        class="quick-btn"
+                        onclick="addSymptom('чихание')"
+                    >
+                        🤧 Чихание
+                    </button>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button
+                        class="main-btn"
+                        onclick="analyzeSymptoms()"
+                    >
+                        🔎 Анализировать
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        onclick="demoMode()"
+                    >
+                        🎮 Demo
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        onclick="clearSymptoms()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ILLUSTRATION -->
+
+        <div class="illustration">
+
+            <div class="doctor"></div>
+
+            <div class="float-icon icon1">
+                🩺
+            </div>
+
+            <div class="float-icon icon2">
+                💊
+            </div>
+
+            <div class="float-icon icon3">
+                ❤️
+            </div>
+
+            <div class="float-icon icon4">
+                🧬
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESULT -->
+
+    <div id="result"></div>
+
+
+    <!-- EMERGENCY -->
+
+    <section class="emergency">
+
+        <div class="emergency-card">
+
+            <h2>
+                🚨 Когда нужна срочная помощь
+            </h2>
+
+            <p>
+                Если человек испытывает серьёзные
+                или быстро ухудшающиеся симптомы,
+                сайт не должен использоваться
+                вместо медицинской помощи.
+            </p>
+
+            <ul>
+
+                <li>
+                    сильная боль в груди;
+                </li>
+
+                <li>
+                    затруднённое дыхание;
+                </li>
+
+                <li>
+                    потеря сознания;
+                </li>
+
+                <li>
+                    внезапная сильная слабость;
+                </li>
+
+                <li>
+                    сильная аллергическая реакция;
+                </li>
+
+                <li>
+                    резкое ухудшение состояния.
+                </li>
+
+            </ul>
+
+            <p style="margin-top:15px;font-weight:bold;">
+
+                В таких ситуациях нужно обратиться
+                за срочной медицинской помощью.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOW -->
+
+    <section
+        class="section"
+        id="how"
+    >
+
+        <h2 class="section-title">
+            Как работает MediGuide?
+        </h2>
+
+        <p class="section-subtitle">
+
+            Три простых шага для получения
+            справочной информации.
+
+        </p>
+
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Опишите симптомы
+                </h3>
+
+                <p>
+
+                    Напишите несколько симптомов
+                    или используйте быстрые кнопки.
+
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Система анализирует текст
+                </h3>
+
+                <p>
+
+                    MediGuide ищет подходящие
+                    информационные категории
+                    в своей демонстрационной базе.
+
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Получите информацию
+                </h3>
+
+                <p>
+
+                    Вы увидите категорию,
+                    найденные симптомы,
+                    предупреждения и справочную
+                    информацию.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MEDICINES -->
+
+    <section
+        class="section"
+        id="medicines"
+    >
+
+        <h2 class="section-title">
+
+            💊 Справочник лекарств
+
+        </h2>
+
+        <p class="section-subtitle">
+
+            Нажмите на средство, чтобы посмотреть
+            общую образовательную информацию.
+
+        </p>
+
+
+        <div class="medicine-search">
+
+            <input
+                id="medicineInput"
+                placeholder="Например: парацетамол"
+                onkeydown="
+                    if(event.key === 'Enter')
+                    searchMedicine()
+                "
+            >
+
+            <button
+                class="main-btn"
+                onclick="searchMedicine()"
+            >
+                Найти
+            </button>
+
+        </div>
+
+
+        <div
+            id="medicineResult"
+            class="medicine-grid"
+        >
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Почему MediGuide?
+
+        </h2>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Умный поиск
+                </h3>
+
+                <p>
+
+                    Система учитывает введённые
+                    пользователем симптомы.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🔒
+                </div>
+
+                <h3>
+                    Приватность
+                </h3>
+
+                <p>
+
+                    В этой демонстрационной версии
+                    данные хранятся только в браузере.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Быстро
+                </h3>
+
+                <p>
+
+                    Результат появляется практически
+                    сразу после анализа.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📱
+                </div>
+
+                <h3>
+                    Адаптивность
+                </h3>
+
+                <p>
+
+                    Интерфейс работает на компьютерах,
+                    планшетах и телефонах.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🌙
+                </div>
+
+                <h3>
+                    Dark Mode
+                </h3>
+
+                <p>
+
+                    Переключайтесь между светлой
+                    и тёмной темой.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🎮
+                </div>
+
+                <h3>
+                    Demo Mode
+                </h3>
+
+                <p>
+
+                    Быстрый пример для тестирования
+                    работы сайта.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRIVACY -->
+
+    <section class="section">
+
+        <div class="privacy">
+
+            <h2>
+                🔒 Ваши данные
+            </h2>
+
+            <p>
+
+                MediGuide — учебный демонстрационный
+                проект. Для анализа не требуется
+                регистрация. История хранится
+                локально в браузере этой версии сайта.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section
+        class="section"
+        id="history"
+    >
+
+        <h2 class="section-title">
+
+            🕘 История анализов
+
+        </h2>
+
+        <p class="section-subtitle">
+
+            Последние результаты сохраняются
+            только в этом браузере.
+
+        </p>
+
+
+        <div
+            id="historyList"
+            class="history"
+        ></div>
+
+
+        <button
+            class="clear-history"
+            onclick="clearHistory()"
+        >
+
+            🗑️ Очистить историю
+
+        </button>
+
+    </section>
+
+
+    <!-- FAQ -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Частые вопросы
+
+        </h2>
+
+
+        <div class="faq">
+
+
+            <div class="faq-item">
+
+                <div
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+
+                    MediGuide ставит диагноз?
+
+                </div>
+
+                <div class="faq-answer">
+
+                    Нет. Сайт использует простое
+                    сопоставление введённого текста
+                    с информационными категориями.
+                    Это не медицинский диагноз.
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <div
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+
+                    Можно ли доверять результату
+                    как диагнозу?
+
+                </div>
+
+                <div class="faq-answer">
+
+                    Нет. Результат предназначен
+                    только для ознакомления.
+                    При проблемах со здоровьем
+                    необходимо обращаться
+                    к медицинскому специалисту.
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <div
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+
+                    Можно ли самостоятельно выбирать
+                    лекарство?
+
+                </div>
+
+                <div class="faq-answer">
+
+                    Информация о лекарствах на сайте
+                    предназначена только для ознакомления.
+                    Перед использованием необходимо
+                    учитывать инструкцию и противопоказания.
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <div
+                    class="faq-question"
+                    onclick="toggleFAQ(this)"
+                >
+
+                    Это настоящий медицинский ИИ?
+
+                </div>
+
+                <div class="faq-answer">
+
+                    Сейчас это учебная версия сайта
+                    с простой системой анализа текста.
+                    В будущем проект можно расширить
+                    серверной частью и профессиональной
+                    медицинской базой.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MODAL -->
+
+    <div
+        class="modal"
+        id="medicineModal"
+    >
+
+        <div class="modal-content">
+
+            <span
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </span>
+
+            <div id="modalContent"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="logo">
+            MediGuide
+        </div>
+
+        <p>
+            Медицинская информация
+            в понятной форме.
+        </p>
+
+        <p
+            style="
+                margin-top:15px;
+                color:#9eb0ba;
+                font-size:13px;
+            "
+        >
+
+            Учебный проект • Не заменяет
+            консультацию врача
+
+        </p>
+
+    </footer>
+
+
+    <script>
+
+
+        /* =====================================================
+           MEDICAL DATABASE
+        ===================================================== */
+
+        const medicalDatabase = [
+
+            {
+                name: "Простудные симптомы",
+
+                keywords: [
+                    "насморк",
+                    "заложен нос",
+                    "боль в горле",
+                    "болит горло",
+                    "кашель",
+                    "чихание"
+                ],
+
+                description:
+                    "Такие симптомы могут встречаться при простудных и других заболеваниях верхних дыхательных путей.",
+
+                medicines: [
+                    "paracetamol",
+                    "ibuprofen"
+                ]
+            },
+
+
+            {
+                name: "Симптомы аллергии",
+
+                keywords: [
+                    "чихание",
+                    "зуд",
+                    "слезятся глаза",
+                    "зудят глаза",
+                    "насморк",
+                    "заложен нос"
+                ],
+
+                description:
+                    "Некоторые из этих симптомов могут встречаться при аллергических состояниях.",
+
+                medicines: [
+                    "cetirizine",
+                    "loratadine"
+                ]
+            },
+
+
+            {
+                name: "Головная боль",
+
+                keywords: [
+                    "болит голова",
+                    "головная боль",
+                    "давит в голове",
+                    "пульсирует голова"
+                ],
+
+                description:
+                    "Головная боль может иметь множество причин, поэтому важно учитывать дополнительные симптомы и обстоятельства.",
+
+                medicines: [
+                    "paracetamol",
+                    "ibuprofen"
+                ]
+            },
+
+
+            {
+                name: "Повышенная температура и ломота",
+
+                keywords: [
+                    "температура",
+                    "высокая температура",
+                    "озноб",
+                    "ломота",
+                    "слабость"
+                ],
+
+                description:
+                    "Повышенная температура и ломота могут встречаться при инфекциях и других состояниях.",
+
+                medicines: [
+                    "paracetamol",
+                    "ibuprofen"
+                ]
+            },
+
+
+            {
+                name: "Тошнота и проблемы с желудком",
+
+                keywords: [
+                    "тошнит",
+                    "тошнота",
+                    "болит живот",
+                    "боль в животе"
+                ],
+
+                description:
+                    "Такие симптомы могут иметь разные причины. Самостоятельно определять причину по одному симптому небезопасно.",
+
+                medicines: []
+            }
+
+        ];
+
+
+        /* =====================================================
+           MEDICINE DATABASE
+        ===================================================== */
+
+        const medicineDatabase = {
+
+
+            paracetamol: {
+
+                name: "Парацетамол",
+
+                icon: "💊",
+
+                description:
+                    "Парацетамол используется для временного облегчения боли и снижения повышенной температуры.",
+
+                safety:
+                    "Важно учитывать инструкцию, противопоказания и другие лекарства, которые человек принимает.",
+
+                important:
+                    "Не следует превышать указанную в инструкции дозу."
+
+            },
+
+
+            ibuprofen: {
+
+                name: "Ибупрофен",
+
+                icon: "💊",
+
+                description:
+                    "Ибупрофен относится к нестероидным противовоспалительным средствам и может использоваться для уменьшения боли, воспаления и температуры.",
+
+                safety:
+                    "Подходит не всем. Некоторые заболевания и лекарства могут быть противопоказаниями.",
+
+                important:
+                    "Перед применением необходимо ознакомиться с инструкцией."
+
+            },
+
+
+            cetirizine: {
+
+                name: "Цетиризин",
+
+                icon: "🌿",
+
+                description:
+                    "Цетиризин — антигистаминное средство, которое применяется при некоторых симптомах аллергии.",
+
+                safety:
+                    "Может вызывать сонливость у некоторых людей.",
+
+                important:
+                    "При сильной аллергической реакции нужна срочная медицинская помощь."
+
+            },
+
+
+            loratadine: {
+
+                name: "Лоратадин",
+
+                icon: "🌿",
+
+                description:
+                    "Лоратадин — антигистаминное средство, применяемое при некоторых аллергических симптомах.",
+
+                safety:
+                    "Перед применением необходимо учитывать противопоказания и инструкцию.",
+
+                important:
+                    "При затруднённом дыхании или другой тяжёлой аллергической реакции нужна срочная помощь."
+
+            }
+
+        };
+
+
+        /* =====================================================
+           QUICK SYMPTOMS
+        ===================================================== */
+
+        function addSymptom(symptom) {
+
+            const input =
+                document.getElementById(
+                    "symptoms"
+                );
+
+            let current =
+                input.value.trim();
+
+
+            if (current === "") {
+
+                input.value = symptom;
+
+            } else {
+
+                if (
+                    !current
+                        .toLowerCase()
+                        .includes(
+                            symptom.toLowerCase()
+                        )
+                ) {
+
+                    input.value =
+                        current +
+                        ", " +
+                        symptom;
+
+                }
+
+            }
+
+            input.focus();
+
+        }
+
+
+        function clearSymptoms() {
+
+            document.getElementById(
+                "symptoms"
+            ).value = "";
+
+            document.getElementById(
+                "result"
+            ).innerHTML = "";
+
+        }
+
+
+        /* =====================================================
+           DEMO MODE
+        ===================================================== */
+
+        function demoMode() {
+
+            document.getElementById(
+                "symptoms"
+            ).value =
+                "насморк, чихание, зуд в глазах";
+
+            analyzeSymptoms();
+
+        }
+
+
+        /* =====================================================
+           ANALYSIS
+        ===================================================== */
+
+        function analyzeSymptoms() {
+
+            const input =
+                document
+                    .getElementById(
+                        "symptoms"
+                    )
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            const result =
+                document.getElementById(
+                    "result"
+                );
+
+
+            if (!input) {
+
+                result.innerHTML = `
+
+                    <div class="result-box">
+
+                        <h2>
+                            ✍️ Сначала опишите симптомы
+                        </h2>
+
+                        <p>
+                            Например:
+                            "насморк, чихание и зуд в глазах".
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            const matches =
+                medicalDatabase
+                    .map(category => {
+
+                        const matchedKeywords =
+                            category.keywords.filter(
+                                keyword =>
+                                    input.includes(
+                                        keyword
+                                    )
+                            );
+
+
+                        return {
+
+                            ...category,
+
+                            matchedKeywords,
+
+                            score:
+                                matchedKeywords.length
+
+                        };
+
+                    })
+
+                    .filter(
+                        item =>
+                            item.score > 0
+                    )
+
+                    .sort(
+                        (a, b) =>
+                            b.score - a.score
+                    );
+
+
+            if (matches.length === 0) {
+
+                result.innerHTML = `
+
+                    <div class="result-box">
+
+                        <div class="result-header">
+
+                            <div>
+
+                                <span class="demo-label">
+                                    ИНФОРМАЦИОННЫЙ АНАЛИЗ
+                                </span>
+
+                                <h2
+                                    style="margin-top:10px;"
+                                >
+                                    🔍 Информация не найдена
+                                </h2>
+
+                                <p>
+
+                                    В текущей
+                                    демонстрационной базе
+                                    нет подходящей
+                                    информационной категории.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="warning">
+
+                            ⚠️ Это не означает, что
+                            определённого состояния нет.
+                            Система просто не нашла
+                            подходящей информации
+                            в своей базе.
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                saveHistory(
+                    input,
+                    "Информация не найдена"
+                );
+
+
+                return;
+
+            }
+
+
+            const best =
+                matches[0];
+
+
+            let medicineHTML = "";
+
+
+            best.medicines.forEach(
+                id => {
+
+                    const medicine =
+                        medicineDatabase[id];
+
+
+                    medicineHTML += `
+
+                        <div
+                            class="medicine-card"
+                            onclick="
+                                openMedicine('${id}')
+                            "
+                        >
+
+                            <div class="medicine-icon">
+                                ${medicine.icon}
+                            </div>
+
+                            <h3>
+                                ${medicine.name}
+                            </h3>
+
+                            <p>
+                                ${medicine.description}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+            const matchedHTML =
+                best.matchedKeywords
+                    .map(
+                        keyword => `
+
+                            <span
+                                class="matched-item"
+                            >
+                                ✓ ${keyword}
+                            </span>
+
+                        `
+                    )
+                    .join("");
+
+
+            result.innerHTML = `
+
+                <div class="result-box">
+
+
+                    <div class="result-header">
+
+                        <div>
+
+                            <span class="demo-label">
+                                ИНФОРМАЦИОННЫЙ АНАЛИЗ
+                            </span>
+
+                            <h2
+                                style="margin-top:10px;"
+                            >
+                                ${best.name}
+                            </h2>
+
+                            <p>
+                                ${best.description}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        style="margin-top:25px;"
+                    >
+
+                        <strong>
+                            Найденные симптомы:
+                        </strong>
+
+
+                        <div class="matched-list">
+
+                            ${matchedHTML}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="warning">
+
+                        ⚠️ <strong>Важно:</strong>
+
+                        MediGuide не ставит
+                        диагноз и не назначает
+                        лечение. Информация
+                        предназначена только
+                        для ознакомления.
+
+                    </div>
+
+
+                    ${
+                        best.medicines.length > 0
+
+                        ?
+
+                        `
+
+                        <div
+                            style="margin-top:30px;"
+                        >
+
+                            <h3>
+                                💊 Справочная информация
+                            </h3>
+
+
+                            <div
+                                class="medicine-grid"
+                                style="margin-top:15px;"
+                            >
+
+                                ${medicineHTML}
+
+                            </div>
+
+                        </div>
+
+                        `
+
+                        :
+
+                        `
+
+                        <div
+                            class="warning"
+                            style="margin-top:20px;"
+                        >
+
+                            Для этой категории
+                            мы не показываем
+                            конкретные средства,
+                            потому что причин
+                            может быть много.
+
+                        </div>
+
+                        `
+                    }
+
+
+                </div>
+
+            `;
+
+
+            saveHistory(
+                input,
+                best.name
+            );
+
+
+            result.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "start"
+
+            });
+
+        }
+
+
+        /* =====================================================
+           MEDICINE SEARCH
+        ===================================================== */
+
+        function searchMedicine() {
+
+            const query =
+                document
+                    .getElementById(
+                        "medicineInput"
+                    )
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            const container =
+                document.getElementById(
+                    "medicineResult"
+                );
+
+
+            const medicines =
+                Object.entries(
+                    medicineDatabase
+                )
+                .filter(
+                    ([id, medicine]) =>
+
+                        medicine.name
+                            .toLowerCase()
+                            .includes(query)
+
+                        ||
+
+                        id.includes(query)
+
+                );
+
+
+            if (!query) {
+
+                showAllMedicines();
+
+                return;
+
+            }
+
+
+            if (medicines.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="medicine-card">
+
+                        <h3>
+                            Ничего не найдено
+                        </h3>
+
+                        <p>
+                            Попробуйте другое название.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                medicines
+                    .map(
+                        ([id, medicine]) => `
+
+                            <div
+                                class="medicine-card"
+                                onclick="
+                                    openMedicine('${id}')
+                                "
+                            >
+
+                                <div
+                                    class="medicine-icon"
+                                >
+                                    ${medicine.icon}
+                                </div>
+
+                                <h3>
+                                    ${medicine.name}
+                                </h3>
+
+                                <p>
+                                    ${medicine.description}
+                                </p>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
+
+        }
+
+
+        function showAllMedicines() {
+
+            const container =
+                document.getElementById(
+                    "medicineResult"
+                );
+
+
+            container.innerHTML =
+                Object.entries(
+                    medicineDatabase
+                )
+                .map(
+                    ([id, medicine]) => `
+
+                        <div
+                            class="medicine-card"
+                            onclick="
+                                openMedicine('${id}')
+                            "
+                        >
+
+                            <div
+                                class="medicine-icon"
+                            >
+                                ${medicine.icon}
+                            </div>
+
+                            <h3>
+                                ${medicine.name}
+                            </h3>
+
+                            <p>
+                                ${medicine.description}
+                            </p>
+
+                        </div>
+
+                    `
+                )
+                .join("");
+
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        function openMedicine(id) {
+
+            const medicine =
+                medicineDatabase[id];
+
+
+            const modal =
+                document.getElementById(
+                    "medicineModal"
+                );
+
+
+            const content =
+                document.getElementById(
+                    "modalContent"
+                );
+
+
+            content.innerHTML = `
+
+                <div
+                    style="font-size:45px;"
+                >
+                    ${medicine.icon}
+                </div>
+
+
+                <h2
+                    style="margin:10px 0 15px;"
+                >
+                    ${medicine.name}
+                </h2>
+
+
+                <p>
+                    ${medicine.description}
+                </p>
+
+
+                <div class="warning">
+
+                    ⚠️ <strong>
+                        Безопасность
+                    </strong>
+
+                    <br><br>
+
+                    ${medicine.safety}
+
+                </div>
+
+
+                <div
+                    class="warning"
+                    style="margin-top:15px;"
+                >
+
+                    📌 <strong>
+                        Важно
+                    </strong>
+
+                    <br><br>
+
+                    ${medicine.important}
+
+                </div>
+
+
+                <p
+                    style="
+                        margin-top:20px;
+                        color:#71818d;
+                    "
+                >
+
+                    Эта информация предназначена
+                    только для образовательных целей
+                    и не заменяет консультацию
+                    медицинского специалиста.
+
+                </p>
+
+            `;
+
+
+            modal.style.display = "flex";
+
+        }
+
+
+        function closeModal() {
+
+            document.getElementById(
+                "medicineModal"
+            ).style.display = "none";
+
+        }
+
+
+        window.onclick =
+            function(event) {
+
+                const modal =
+                    document.getElementById(
+                        "medicineModal"
+                    );
+
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal();
+
+                }
+
+            };
+
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           HISTORY
+        ===================================================== */
+
+        function saveHistory(
+            symptoms,
+            category
+        ) {
+
+            let history =
+                JSON.parse(
+                    localStorage.getItem(
+                        "mediguideHistory"
+                    )
+                ) || [];
+
+
+            const item = {
+
+                symptoms:
+                    symptoms.substring(
+                        0,
+                        100
+                    ),
+
+                category:
+                    category,
+
+                date:
+                    new Date()
+                        .toLocaleString(
+                            "ru-RU"
+                        )
+
+            };
+
+
+            history.unshift(item);
+
+
+            history =
+                history.slice(0, 10);
+
+
+            localStorage.setItem(
+                "mediguideHistory",
+                JSON.stringify(history)
+            );
+
+
+            displayHistory();
+
+        }
+
+
+        function displayHistory() {
+
+            const container =
+                document.getElementById(
+                    "historyList"
+                );
+
+
+            let history =
+                JSON.parse(
+                    localStorage.getItem(
+                        "mediguideHistory"
+                    )
+                ) || [];
+
+
+            if (history.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="history-item">
+
+                        <div>
+                            🕘 История пока пустая
+                        </div>
+
+                        <small>
+                            После анализа здесь
+                            появятся результаты.
+                        </small>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                history
+                    .map(
+                        item => `
+
+                            <div
+                                class="history-item"
+                            >
+
+                                <div>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            item.category
+                                        )}
+                                    </strong>
+
+                                    <br>
+
+                                    <small>
+                                        ${escapeHTML(
+                                            item.symptoms
+                                        )}
+                                    </small>
+
+                                </div>
+
+
+                                <div>
+
+                                    <small>
+                                        ${item.date}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
+
+        }
+
+
+        function clearHistory() {
+
+            localStorage.removeItem(
+                "mediguideHistory"
+            );
+
+            displayHistory();
+
+        }
+
+
+        function escapeHTML(text) {
+
+            return text
+                .replaceAll(
+                    "&",
+                    "&amp;"
+                )
+                .replaceAll(
+                    "<",
+                    "&lt;"
+                )
+                .replaceAll(
+                    ">",
+                    "&gt;"
+                )
+                .replaceAll(
+                    '"',
+                    "&quot;"
+                )
+                .replaceAll(
+                    "'",
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =====================================================
+           DARK MODE
+        ===================================================== */
+
+        function toggleTheme() {
+
+            document.body
+                .classList
+                .toggle("dark");
+
+
+            const isDark =
+                document.body
+                    .classList
+                    .contains("dark");
+
+
+            localStorage.setItem(
+                "mediguideTheme",
+                isDark
+                    ? "dark"
+                    : "light"
+            );
+
+
+            document.getElementById(
+                "themeButton"
+            ).textContent =
+                isDark
+                    ? "☀️"
+                    : "🌙";
+
+        }
+
+
+        function loadTheme() {
+
+            const theme =
+                localStorage.getItem(
+                    "mediguideTheme"
+                );
+
+
+            if (theme === "dark") {
+
+                document.body
+                    .classList
+                    .add("dark");
+
+
+                document.getElementById(
+                    "themeButton"
+                ).textContent = "☀️";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           FAQ
+        ===================================================== */
+
+        function toggleFAQ(element) {
+
+            const item =
+                element.parentElement;
+
+            item.classList.toggle(
+                "active"
+            );
+
+        }
+
+
+        /* =====================================================
+           KEYBOARD
+        ===================================================== */
+
+        document
+            .getElementById("symptoms")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (
+                        event.key === "Enter" &&
+                        event.ctrlKey
+                    ) {
+
+                        analyzeSymptoms();
+
+                    }
+
+                }
+            );
+
+
+        /* =====================================================
+           START
+        ===================================================== */
+
+        loadTheme();
+
+        showAllMedicines();
+
+        displayHistory();
+
+
+    </script>
+
+</body>
+
+</html>
