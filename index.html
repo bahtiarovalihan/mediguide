@@ -983,6 +983,40 @@ font-size:29px
 }
 
 }
+
+/* ===============================
+   MEDIGUIDE 2.0 ANALYSIS UI
+   =============================== */
+.analysis-result{overflow:hidden}
+.analysis-title-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
+.analysis-icon,.analysis-alert{width:48px;height:48px;min-width:48px;border-radius:15px;display:grid;place-items:center;background:var(--light);font-size:24px}
+.analysis-alert{background:var(--danger-bg)}
+.analysis-kicker{text-transform:uppercase;letter-spacing:.08em;font-size:10px;font-weight:900;color:var(--primary);margin-bottom:3px}
+.analysis-list{display:flex;flex-direction:column;gap:15px;margin-top:20px}
+.condition-card{padding:21px;border:1px solid var(--border);border-radius:21px;background:var(--bg)}
+.condition-best{border-color:rgba(15,118,110,.35);box-shadow:0 10px 30px rgba(15,118,110,.07)}
+.condition-header{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.condition-header h3{margin:0;font-size:21px}
+.match-score{min-width:105px;text-align:right}
+.match-score strong{display:block;font-size:20px;color:var(--primary)}
+.match-score small{display:block;color:var(--muted);font-size:10px;font-weight:800}
+.score-bar{height:7px;background:var(--border);border-radius:999px;overflow:hidden;margin:12px 0 15px}
+.score-bar span{display:block;height:100%;background:var(--primary);border-radius:999px}
+.analysis-section{margin-top:17px}
+.analysis-section h4,.analysis-grid h4{font-size:13px;margin-bottom:7px}
+.analysis-section p,.analysis-grid p{font-size:13px;color:var(--muted);margin:0}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}
+.analysis-grid>div{padding:14px;border:1px solid var(--border);border-radius:15px;background:var(--card)}
+.analysis-medicines{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px}
+.analysis-medicine{display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;text-align:left;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--card);color:var(--text)}
+.analysis-medicine span{grid-row:1/3;font-size:22px}
+.analysis-medicine strong{font-size:13px}
+.analysis-medicine small{font-size:10px;color:var(--muted)}
+.doctor-note{padding:14px;border-radius:15px;background:var(--warning-bg)}
+.analysis-danger{border-color:rgba(220,38,38,.35)}
+.analysis-danger .analysis-kicker{color:var(--danger)}
+@media(max-width:600px){.analysis-grid{grid-template-columns:1fr}.condition-header{flex-direction:column}.match-score{text-align:left}.analysis-medicines{grid-template-columns:1fr}.analysis-title-row{gap:10px}}
+
 </style>
 </head>
 
@@ -2313,705 +2347,272 @@ sneeze:"sneezing"
 };
 
 
+/* ===============================
+   MEDIGUIDE 2.0 — SYMPTOM ENGINE
+   =============================== */
+
 const db = [
-
 {
-key:"cold",
-
-keywords:[
-"насморк",
-"заложен нос",
-"боль в горле",
-"болит горло",
-"кашель",
-"чихание",
-"runny nose",
-"blocked nose",
-"sore throat",
-"cough",
-"sneezing",
-"burun oqishi",
-"burun bitishi",
-"tomoq og‘rig‘i",
-"yo‘tal",
-"aksirish"
-],
-
-meds:[
-"paracetamol",
-"ibuprofen"
-]
-
+ key:"cold",
+ name:{ru:"Обычная простуда",uz:"Oddiy shamollash",en:"Common cold"},
+ summary:{
+  ru:"Вирусная инфекция верхних дыхательных путей. Обычно вызывает насморк, заложенность носа, чихание, боль в горле и кашель.",
+  uz:"Yuqori nafas yo‘llarining virusli infeksiyasi. Odatda burun oqishi, burun bitishi, aksirish, tomoq og‘rig‘i va yo‘talni keltirib chiqaradi.",
+  en:"A viral upper-respiratory infection that commonly causes a runny or blocked nose, sneezing, sore throat and cough."
+ },
+ symptoms:["насморк","заложен нос","заложенность носа","чихание","боль в горле","болит горло","кашель","runny nose","blocked nose","nasal congestion","sneezing","sore throat","cough","burun oqishi","burun bitishi","aksirish","tomoq og‘rig‘i","yo‘tal"],
+ weights:{"насморк":3,"заложен нос":3,"заложенность носа":3,"чихание":2,"боль в горле":2,"болит горло":2,"кашель":2,"runny nose":3,"blocked nose":3,"nasal congestion":3,"sneezing":2,"sore throat":2,"cough":2,"burun oqishi":3,"burun bitishi":3,"aksirish":2,"tomoq og‘rig‘i":2,"yo‘tal":2},
+ matchedLabels:{ru:["насморк","заложенность носа","чихание","боль в горле","кашель"],uz:["burun oqishi","burun bitishi","aksirish","tomoq og‘rig‘i","yo‘tal"],en:["runny nose","nasal congestion","sneezing","sore throat","cough"]},
+ meds:["paracetamol","ibuprofen"]
 },
-
 {
-
-key:"allergy",
-
-keywords:[
-"чихание",
-"зуд",
-"слезятся глаза",
-"зудят глаза",
-"насморк",
-"sneezing",
-"itch",
-"itchy eyes",
-"watery eyes",
-"runny nose",
-"aksirish",
-"qichishish",
-"ko‘z qichishishi",
-"ko‘z yoshlanishi",
-"burun oqishi"
-],
-
-meds:[
-"cetirizine",
-"loratadine"
-]
-
+ key:"flu",
+ name:{ru:"Грипп",uz:"Gripp",en:"Influenza"},
+ summary:{ru:"Вирусная инфекция, которая часто начинается резко и может сопровождаться температурой, ознобом, выраженной слабостью, ломотой, головной болью и кашлем.",uz:"Ko‘pincha to‘satdan boshlanadigan virusli infeksiya. Isitma, titroq, kuchli holsizlik, badan og‘rig‘i, bosh og‘rig‘i va yo‘tal bo‘lishi mumkin.",en:"A viral infection that often starts suddenly and may cause fever, chills, marked weakness, body aches, headache and cough."},
+ symptoms:["высокая температура","температура","озноб","ломота","слабость","головная боль","кашель","fever","high fever","chills","body aches","weakness","headache","cough","isitma","yuqori harorat","titroq","holsizlik","bosh og‘rig‘i","yo‘tal"],
+ weights:{"высокая температура":4,"температура":3,"озноб":3,"ломота":3,"слабость":2,"головная боль":2,"кашель":2,"fever":4,"high fever":4,"chills":3,"body aches":3,"weakness":2,"headache":2,"cough":2,"isitma":4,"yuqori harorat":4,"titroq":3,"holsizlik":2,"bosh og‘rig‘i":2,"yo‘tal":2},
+ matchedLabels:{ru:["температура","озноб","ломота","слабость","головная боль","кашель"],uz:["isitma","titroq","holsizlik","bosh og‘rig‘i","yo‘tal"],en:["fever","chills","body aches","weakness","headache","cough"]},
+ meds:["paracetamol","ibuprofen"]
 },
-
 {
-
-key:"headache",
-
-keywords:[
-"болит голова",
-"головная боль",
-"давит в голове",
-"пульсирует голова",
-"headache",
-"head hurts",
-"bosh og‘rig‘i",
-"boshim og‘riyapti"
-],
-
-meds:[
-"paracetamol",
-"ibuprofen"
-]
-
+ key:"allergy",
+ name:{ru:"Аллергический ринит",uz:"Allergik rinit",en:"Allergic rhinitis"},
+ summary:{ru:"Аллергическая реакция, часто вызывающая приступы чихания, зуд в носу или глазах, слезотечение и водянистый насморк.",uz:"Ko‘pincha aksirish, burun yoki ko‘z qichishishi, ko‘z yoshlanishi va suvli burun oqishini keltirib chiqaradigan allergik holat.",en:"An allergic condition that commonly causes repeated sneezing, itchy nose or eyes, watery eyes and a runny nose."},
+ symptoms:["чихание","зуд","зуд в носу","зудят глаза","зуд в глазах","слезятся глаза","слезотечение","насморк","sneezing","itch","itchy nose","itchy eyes","watery eyes","runny nose","aksirish","qichishish","burun qichishishi","ko‘z qichishishi","ko‘z yoshlanishi","burun oqishi"],
+ weights:{"чихание":3,"зуд":3,"зуд в носу":3,"зудят глаза":4,"зуд в глазах":4,"слезятся глаза":3,"слезотечение":3,"насморк":2,"sneezing":3,"itch":3,"itchy nose":3,"itchy eyes":4,"watery eyes":3,"runny nose":2,"aksirish":3,"qichishish":3,"burun qichishishi":3,"ko‘z qichishishi":4,"ko‘z yoshlanishi":3,"burun oqishi":2},
+ matchedLabels:{ru:["чихание","зуд","зуд в глазах","слезотечение","насморк"],uz:["aksirish","qichishish","ko‘z qichishishi","ko‘z yoshlanishi","burun oqishi"],en:["sneezing","itch","itchy eyes","watery eyes","runny nose"]},
+ meds:["cetirizine","loratadine"]
 },
-
 {
-
-key:"fever",
-
-keywords:[
-"температура",
-"высокая температура",
-"озноб",
-"ломота",
-"слабость",
-"temperature",
-"fever",
-"chills",
-"body aches",
-"weakness",
-"harorat",
-"isitma",
-"titroq",
-"holsizlik"
-],
-
-meds:[
-"paracetamol",
-"ibuprofen"
-]
-
+ key:"migraine",
+ name:{ru:"Мигрень",uz:"Migren",en:"Migraine"},
+ summary:{ru:"Тип головной боли, который у некоторых людей сопровождается пульсирующей болью, тошнотой и повышенной чувствительностью к свету или звукам.",uz:"Ba’zi odamlarda pulsatsiyalanuvchi bosh og‘rig‘i, ko‘ngil aynishi va yorug‘lik yoki tovushga sezgirlik bilan kechadigan bosh og‘rig‘i turi.",en:"A type of headache that may involve throbbing pain, nausea and increased sensitivity to light or sound."},
+ symptoms:["головная боль","пульсирующая боль","пульсирует голова","тошнота","свет раздражает","светобоязнь","шум раздражает","headache","throbbing headache","nausea","light sensitivity","sensitivity to light","sound sensitivity","bosh og‘rig‘i","pulsatsiyalanuvchi og‘riq","ko‘ngil aynishi","yorug‘likka sezgirlik"],
+ weights:{"головная боль":3,"пульсирующая боль":4,"пульсирует голова":4,"тошнота":2,"свет раздражает":3,"светобоязнь":3,"шум раздражает":3,"headache":3,"throbbing headache":4,"nausea":2,"light sensitivity":3,"sensitivity to light":3,"sound sensitivity":3,"bosh og‘rig‘i":3,"pulsatsiyalanuvchi og‘riq":4,"ko‘ngil aynishi":2,"yorug‘likka sezgirlik":3},
+ matchedLabels:{ru:["головная боль","пульсирующая боль","тошнота","чувствительность к свету"],uz:["bosh og‘rig‘i","pulsatsiyalanuvchi og‘riq","ko‘ngil aynishi","yorug‘likka sezgirlik"],en:["headache","throbbing headache","nausea","light sensitivity"]},
+ meds:["paracetamol","ibuprofen"]
 },
-
 {
-
-key:"stomach",
-
-keywords:[
-"тошнит",
-"тошнота",
-"болит живот",
-"боль в животе",
-"nausea",
-"stomach ache",
-"abdominal pain",
-"ko‘ngil aynishi",
-"qorin og‘rig‘i"
-],
-
-meds:[]
-
+ key:"pharyngitis",
+ name:{ru:"Фарингит / воспаление горла",uz:"Faringit / tomoq yallig‘lanishi",en:"Pharyngitis / sore throat"},
+ summary:{ru:"Воспаление глотки, при котором часто возникают боль или раздражение в горле, особенно при глотании.",uz:"Halqum yallig‘lanishi bo‘lib, ko‘pincha tomoq og‘rig‘i yoki yutishda noqulaylikni keltirib chiqaradi.",en:"Inflammation of the throat that commonly causes soreness or irritation, especially when swallowing."},
+ symptoms:["боль в горле","болит горло","больно глотать","першит горло","раздражение горла","sore throat","throat pain","pain when swallowing","scratchy throat","tomoq og‘rig‘i","yutish og‘riqli","tomoq qichishi"],
+ weights:{"боль в горле":4,"болит горло":4,"больно глотать":4,"першит горло":3,"раздражение горла":3,"sore throat":4,"throat pain":4,"pain when swallowing":4,"scratchy throat":3,"tomoq og‘rig‘i":4,"yutish og‘riqli":4,"tomoq qichishi":3},
+ matchedLabels:{ru:["боль в горле","больно глотать","першение"],uz:["tomoq og‘rig‘i","yutish og‘riqli","tomoq qichishi"],en:["sore throat","pain when swallowing","scratchy throat"]},
+ meds:["paracetamol","ibuprofen"]
+},
+{
+ key:"sinusitis",
+ name:{ru:"Синусит",uz:"Sinusit",en:"Sinusitis"},
+ summary:{ru:"Воспаление околоносовых пазух, которое может сопровождаться заложенностью носа, выделениями из носа, болью или давлением в области лица.",uz:"Burun yon bo‘shliqlarining yallig‘lanishi. Burun bitishi, burun ajralmasi va yuz sohasida og‘riq yoki bosim bo‘lishi mumkin.",en:"Inflammation of the sinuses that may cause nasal congestion, discharge and facial pain or pressure."},
+ symptoms:["заложенность носа","заложен нос","боль в лице","давление в лице","боль в области пазух","густые выделения из носа","nasal congestion","blocked nose","facial pain","facial pressure","sinus pressure","thick nasal discharge","burun bitishi","yuz og‘rig‘i","yuzda bosim","qalin burun ajralmasi"],
+ weights:{"заложенность носа":3,"заложен нос":3,"боль в лице":4,"давление в лице":4,"боль в области пазух":4,"густые выделения из носа":3,"nasal congestion":3,"blocked nose":3,"facial pain":4,"facial pressure":4,"sinus pressure":4,"thick nasal discharge":3,"burun bitishi":3,"yuz og‘rig‘i":4,"yuzda bosim":4,"qalin burun ajralmasi":3},
+ matchedLabels:{ru:["заложенность носа","боль/давление в лице","выделения из носа"],uz:["burun bitishi","yuz og‘rig‘i","yuzda bosim"],en:["nasal congestion","facial pain/pressure","nasal discharge"]},
+ meds:["paracetamol","ibuprofen"]
+},
+{
+ key:"gastroenteritis",
+ name:{ru:"Гастроэнтерит",uz:"Gastroenterit",en:"Gastroenteritis"},
+ summary:{ru:"Воспаление желудка и кишечника, часто связанное с инфекцией. Может вызывать тошноту, рвоту, диарею и боль или спазмы в животе.",uz:"Oshqozon va ichaklarning yallig‘lanishi. Ko‘ngil aynishi, qusish, ich ketishi va qorin og‘rig‘i yoki spazmlari bo‘lishi mumkin.",en:"Inflammation of the stomach and intestines that may cause nausea, vomiting, diarrhea and abdominal pain or cramps."},
+ symptoms:["тошнота","рвота","диарея","понос","боль в животе","спазмы в животе","nausea","vomiting","diarrhea","diarrhoea","stomach ache","abdominal pain","abdominal cramps","ko‘ngil aynishi","qusish","ich ketishi","qorin og‘rig‘i","qorin spazmlari"],
+ weights:{"тошнота":3,"рвота":4,"диарея":4,"понос":4,"боль в животе":3,"спазмы в животе":3,"nausea":3,"vomiting":4,"diarrhea":4,"diarrhoea":4,"stomach ache":3,"abdominal pain":3,"abdominal cramps":3,"ko‘ngil aynishi":3,"qusish":4,"ich ketishi":4,"qorin og‘rig‘i":3,"qorin spazmlari":3},
+ matchedLabels:{ru:["тошнота","рвота","диарея","боль в животе"],uz:["ko‘ngil aynishi","qusish","ich ketishi","qorin og‘rig‘i"],en:["nausea","vomiting","diarrhea","abdominal pain"]},
+ meds:[]
+},
+{
+ key:"bronchitis",
+ name:{ru:"Бронхит",uz:"Bronxit",en:"Bronchitis"},
+ summary:{ru:"Воспаление бронхов, которое часто сопровождается кашлем. Кашель может быть сухим или с выделением мокроты.",uz:"Bronxlarning yallig‘lanishi bo‘lib, ko‘pincha yo‘tal bilan kechadi. Yo‘tal quruq yoki balg‘amli bo‘lishi mumkin.",en:"Inflammation of the bronchial tubes that commonly causes cough, which may be dry or produce mucus."},
+ symptoms:["кашель","мокрота","сухой кашель","влажный кашель","кашель с мокротой","cough","mucus","phlegm","dry cough","productive cough","yo‘tal","balg‘am","quruq yo‘tal","balg‘amli yo‘tal"],
+ weights:{"кашель":3,"мокрота":4,"сухой кашель":4,"влажный кашель":4,"кашель с мокротой":4,"cough":3,"mucus":4,"phlegm":4,"dry cough":4,"productive cough":4,"yo‘tal":3,"balg‘am":4,"quruq yo‘tal":4,"balg‘amli yo‘tal":4},
+ matchedLabels:{ru:["кашель","мокрота","сухой/влажный кашель"],uz:["yo‘tal","balg‘am","quruq/balg‘amli yo‘tal"],en:["cough","mucus/phlegm","dry/productive cough"]},
+ meds:["paracetamol","ibuprofen"]
 }
-
 ];
 
-
-const medicines = {
-
-paracetamol:{
-
-names:{
-ru:"Парацетамол",
-uz:"Paratsetamol",
-en:"Paracetamol"
-},
-
-icon:"💊",
-
-desc:{
-ru:"Средство, которое используется для уменьшения боли и снижения температуры.",
-uz:"Og‘riqni kamaytirish va haroratni tushirish uchun qo‘llanadigan dori.",
-en:"A medicine used to reduce pain and fever."
-},
-
-safety:{
-ru:"Учитывайте противопоказания и индивидуальные особенности.",
-uz:"Qarshi ko‘rsatmalar va individual xususiyatlarni hisobga oling.",
-en:"Consider contraindications and individual factors."
-},
-
-important:{
-ru:"Не превышайте дозу, указанную в официальной инструкции.",
-uz:"Rasmiy yo‘riqnomada ko‘rsatilgan dozadan oshirmang.",
-en:"Do not exceed the dose stated in the official instructions."
-}
-
-},
-
-
-ibuprofen:{
-
-names:{
-ru:"Ибупрофен",
-uz:"Ibuprofen",
-en:"Ibuprofen"
-},
-
-icon:"💊",
-
-desc:{
-ru:"Нестероидное противовоспалительное средство, применяемое при боли, воспалении и температуре.",
-uz:"Og‘riq, yallig‘lanish va haroratda qo‘llanadigan nosteroid yallig‘lanishga qarshi dori.",
-en:"A non-steroidal anti-inflammatory medicine used for pain, inflammation and fever."
-},
-
-safety:{
-ru:"Имеет противопоказания и может подходить не всем.",
-uz:"Qarshi ko‘rsatmalari bor va hamma uchun mos kelmasligi mumkin.",
-en:"It has contraindications and may not be suitable for everyone."
-},
-
-important:{
-ru:"Перед применением ознакомьтесь с официальной инструкцией.",
-uz:"Qo‘llashdan oldin rasmiy yo‘riqnomani o‘qing.",
-en:"Read the official instructions before use."
-}
-
-},
-
-
-cetirizine:{
-
-names:{
-ru:"Цетиризин",
-uz:"Setirizin",
-en:"Cetirizine"
-},
-
-icon:"🌿",
-
-desc:{
-ru:"Антигистаминное средство для облегчения некоторых симптомов аллергии.",
-uz:"Ba’zi allergiya alomatlarini yengillashtirish uchun qo‘llanadigan antigistamin dori.",
-en:"An antihistamine used to relieve some allergy symptoms."
-},
-
-safety:{
-ru:"У некоторых людей может вызывать сонливость.",
-uz:"Ba’zi odamlarda uyquchanlik chaqirishi mumkin.",
-en:"May cause drowsiness in some people."
-},
-
-important:{
-ru:"Следуйте официальной инструкции и учитывайте противопоказания.",
-uz:"Rasmiy yo‘riqnomaga amal qiling va qarshi ko‘rsatmalarni hisobga oling.",
-en:"Follow official instructions and consider contraindications."
-}
-
-},
-
-
-loratadine:{
-
-names:{
-ru:"Лоратадин",
-uz:"Loratadin",
-en:"Loratadine"
-},
-
-icon:"🌿",
-
-desc:{
-ru:"Антигистаминное средство для облегчения некоторых аллергических симптомов.",
-uz:"Ba’zi allergiya alomatlarini yengillashtirish uchun qo‘llanadigan antigistamin dori.",
-en:"An antihistamine used to relieve some allergy symptoms."
-},
-
-safety:{
-ru:"Учитывайте противопоказания и возможные побочные эффекты.",
-uz:"Qarshi ko‘rsatmalar va mumkin bo‘lgan nojo‘ya ta’sirlarni hisobga oling.",
-en:"Consider contraindications and possible side effects."
-},
-
-important:{
-ru:"Используйте препарат согласно официальной инструкции.",
-uz:"Preparatni rasmiy yo‘riqnomaga muvofiq qo‘llang.",
-en:"Use the medicine according to the official instructions."
-}
-
-}
-
+/* Red flags: these stop ordinary medicine-oriented output. */
+const redFlags = {
+ ru:["трудно дышать","затруднено дыхание","не могу дышать","сильная боль в груди","боль в груди","потерял сознание","потеря сознания","сильное кровотечение","кровь при рвоте","кровь в рвоте","сильная аллергическая реакция","отек лица","отек языка","посинение губ"],
+ uz:["nafas olish qiyin","nafas yetishmayapti","ko‘krakda kuchli og‘riq","ko‘krak og‘rig‘i","hushdan ketish","kuchli qon ketish","qusishda qon","kuchli allergik reaksiya","yuz shishi","til shishi","lablar ko‘karishi"],
+ en:["difficulty breathing","can't breathe","cannot breathe","severe chest pain","chest pain","loss of consciousness","fainted","severe bleeding","vomiting blood","severe allergic reaction","swelling of the face","swollen tongue","blue lips"]
 };
 
-
-let lang =
-localStorage.getItem("mediguideLanguage") || "ru";
-
-
-function t(key){
-
-return T[lang][key] || key;
-
+function normalizeText(value){
+ return value
+  .toLowerCase()
+  .replace(/[.,!?;:()\[\]{}]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
 }
 
-
-function applyLanguage(){
-
-document.documentElement.lang = lang;
-
-document.getElementById("languageSelect").value = lang;
-
-
-document
-.querySelectorAll("[data-i18n]")
-.forEach(element=>{
-
-const key = element.dataset.i18n;
-
-if(T[lang][key] !== undefined){
-
-element.textContent = T[lang][key];
-
+function containsPhrase(text, phrase){
+ return (" " + text + " ").includes(" " + phrase.toLowerCase() + " ") || text.includes(phrase.toLowerCase());
 }
 
-});
-
-
-document
-.querySelectorAll("[data-i18n-placeholder]")
-.forEach(element=>{
-
-element.placeholder =
-t(element.dataset.i18nPlaceholder);
-
-});
-
-
-showAllMedicines();
-
-displayHistory();
-
-localStorage.setItem(
-"mediguideLanguage",
-lang
-);
-
+function detectRedFlags(input){
+ const all = [...redFlags.ru,...redFlags.uz,...redFlags.en];
+ return all.filter(flag=>containsPhrase(input,flag));
 }
 
-
-document
-.getElementById("languageSelect")
-.addEventListener(
-"change",
-event=>{
-
-lang = event.target.value;
-
-applyLanguage();
-
-}
-);
-
-
-function addSymptom(key){
-
-const textarea =
-document.getElementById("symptoms");
-
-const word =
-symptomWords[lang][key];
-
-
-if(!textarea.value.trim()){
-
-textarea.value = word;
-
-}else if(
-!textarea.value
-.toLowerCase()
-.includes(word.toLowerCase())
-){
-
-textarea.value += ", " + word;
-
+function scoreCondition(condition,input){
+ let score=0;
+ const matched=[];
+ const seen=new Set();
+ for(const symptom of condition.symptoms){
+  if(containsPhrase(input,symptom)){
+   const weight=condition.weights[symptom] || 1;
+   score += weight;
+   if(!seen.has(symptom)){
+    matched.push(symptom);
+    seen.add(symptom);
+   }
+  }
+ }
+ return {score,matched};
 }
 
+function getLocalizedMatches(condition,matched){
+ const labels=condition.matchedLabels[lang] || condition.matchedLabels.ru;
+ const found=[];
+ labels.forEach(label=>{
+  const parts=label.toLowerCase().split("/");
+  if(parts.some(part=>matched.some(m=>m.toLowerCase().includes(part.trim()) || part.trim().includes(m.toLowerCase())))) found.push(label);
+ });
+ return found.length ? found : matched.slice(0,5);
 }
 
-
-function clearSymptoms(){
-
-document.getElementById("symptoms").value = "";
-
-document.getElementById("result").innerHTML = "";
-
+function confidenceLabel(score,rank){
+ if(rank===0 && score>=7) return {ru:"Высокое соответствие",uz:"Yuqori moslik",en:"High match"};
+ if(score>=4) return {ru:"Умеренное соответствие",uz:"O‘rtacha moslik",en:"Moderate match"};
+ return {ru:"Низкое соответствие",uz:"Past moslik",en:"Low match"};
 }
 
-
-function demoMode(){
-
-const textarea =
-document.getElementById("symptoms");
-
-
-if(lang === "ru"){
-
-textarea.value =
-"насморк, чихание, зуд в глазах";
-
+function conditionExtra(condition){
+ const data={
+  cold:{
+   typical:{ru:"Насморк, заложенность носа, чихание, боль в горле и кашель.",uz:"Burun oqishi, burun bitishi, aksirish, tomoq og‘rig‘i va yo‘tal.",en:"Runny or blocked nose, sneezing, sore throat and cough."},
+   care:{ru:"Обычно используют отдых, достаточное питьё и симптоматический уход. Антибиотики не лечат вирусную простуду.",uz:"Odatda dam olish, yetarli suyuqlik va simptomlarni yengillashtirishga qaratilgan parvarish qo‘llanadi. Antibiotiklar virusli shamollashni davolamaydi.",en:"Rest, adequate fluids and symptom-focused care are commonly used. Antibiotics do not treat a viral cold."},
+   doctor:{ru:"Обратитесь за медицинской оценкой при выраженном ухудшении, длительной высокой температуре или необычных симптомах.",uz:"Holat keskin yomonlashsa, yuqori harorat uzoq davom etsa yoki noodatiy alomatlar bo‘lsa, shifokorga murojaat qiling.",en:"Seek medical assessment if symptoms become severe, high fever persists, or unusual symptoms appear."}
+  },
+  flu:{
+   typical:{ru:"Часто возникают температура, озноб, ломота, слабость, головная боль и кашель.",uz:"Ko‘pincha isitma, titroq, badan og‘rig‘i, holsizlik, bosh og‘rig‘i va yo‘tal kuzatiladi.",en:"Common features include fever, chills, body aches, weakness, headache and cough."},
+   care:{ru:"Обычно важны отдых, питьё и наблюдение за состоянием. При выраженных симптомах нужна медицинская оценка.",uz:"Odatda dam olish, suyuqlik ichish va holatni kuzatish muhim. Kuchli alomatlarda tibbiy baholash kerak.",en:"Rest, fluids and monitoring are commonly important. Significant symptoms may require medical assessment."},
+   doctor:{ru:"Особенно важно обратиться за помощью при затруднённом дыхании, боли в груди или резком ухудшении.",uz:"Nafas olish qiyinlashsa, ko‘krak og‘risa yoki holat keskin yomonlashsa, yordamga murojaat qiling.",en:"Seek help for difficulty breathing, chest pain or sudden worsening."}
+  },
+  allergy:{
+   typical:{ru:"Чихание, зуд, водянистый насморк, зуд или слезотечение глаз.",uz:"Aksirish, qichishish, suvli burun oqishi, ko‘z qichishishi yoki yoshlanishi.",en:"Sneezing, itching, watery runny nose, itchy or watery eyes."},
+   care:{ru:"Важно по возможности избегать известного аллергена. В справочнике MediGuide есть общая информация об антигистаминных препаратах.",uz:"Imkon bo‘lsa ma’lum allergenlardan saqlanish muhim. MediGuide ma’lumotnomasida antigistamin dorilar haqida umumiy ma’lumot bor.",en:"Avoiding a known trigger when possible can help. MediGuide contains general information about antihistamine medicines."},
+   doctor:{ru:"При отёке языка или лица, выраженной одышке или быстром ухудшении нужна срочная помощь.",uz:"Til yoki yuz shishi, kuchli nafas qisilishi yoki tez yomonlashishda shoshilinch yordam kerak.",en:"Urgent help is needed for tongue or facial swelling, significant breathing difficulty or rapid worsening."}
+  },
+  migraine:{
+   typical:{ru:"Головная боль, иногда пульсирующая, с тошнотой и чувствительностью к свету или звукам.",uz:"Bosh og‘rig‘i, ba’zan pulsatsiyalanuvchi, ko‘ngil aynishi va yorug‘lik yoki tovushga sezgirlik bilan.",en:"Headache, sometimes throbbing, with nausea and sensitivity to light or sound."},
+   care:{ru:"Полезно находиться в спокойной обстановке и следовать назначенному врачом плану, если мигрень уже диагностирована.",uz:"Tinch muhitda bo‘lish va migren avval tashxislangan bo‘lsa, shifokor tavsiya qilgan rejaga amal qilish foydali.",en:"A quiet environment may help; if migraine has already been diagnosed, follow the plan provided by a clinician."},
+   doctor:{ru:"Новая, необычно сильная или внезапная головная боль требует медицинской оценки.",uz:"Yangi, noodatiy kuchli yoki to‘satdan paydo bo‘lgan bosh og‘rig‘i tibbiy baholashni talab qiladi.",en:"A new, unusually severe or sudden headache requires medical assessment."}
+  },
+  pharyngitis:{
+   typical:{ru:"Боль или раздражение в горле, особенно при глотании.",uz:"Tomoq og‘rig‘i yoki tirnashishi, ayniqsa yutishda.",en:"Sore or irritated throat, especially when swallowing."},
+   care:{ru:"Поддерживающие меры могут уменьшать дискомфорт. Причина воспаления может быть разной, поэтому антибиотики нельзя считать универсальным решением.",uz:"Qo‘llab-quvvatlovchi choralar noqulaylikni kamaytirishi mumkin. Sabab turlicha bo‘lishi mumkin, shuning uchun antibiotik universal yechim emas.",en:"Supportive care may reduce discomfort. Causes vary, so antibiotics are not a universal solution."},
+   doctor:{ru:"При затруднённом дыхании или глотании, выраженном ухудшении или сильной боли нужна медицинская оценка.",uz:"Nafas olish yoki yutish qiyinlashsa, holat yomonlashsa yoki og‘riq kuchli bo‘lsa, tibbiy baholash kerak.",en:"Medical assessment is important for difficulty breathing or swallowing, severe pain or worsening symptoms."}
+  },
+  sinusitis:{
+   typical:{ru:"Заложенность носа, выделения из носа и давление или боль в области лица.",uz:"Burun bitishi, burun ajralmasi va yuz sohasida bosim yoki og‘riq.",en:"Nasal congestion, nasal discharge and facial pain or pressure."},
+   care:{ru:"Подход зависит от причины и длительности симптомов. Не стоит автоматически использовать антибиотики.",uz:"Yondashuv sabab va alomatlar davomiyligiga bog‘liq. Antibiotiklarni avtomatik qo‘llash kerak emas.",en:"Management depends on the cause and duration. Antibiotics should not be assumed to be necessary automatically."},
+   doctor:{ru:"При сильной боли, отёке лица, ухудшении зрения или выраженном ухудшении нужна медицинская помощь.",uz:"Kuchli og‘riq, yuz shishi, ko‘rish yomonlashishi yoki keskin yomonlashishda tibbiy yordam kerak.",en:"Seek medical help for severe pain, facial swelling, vision changes or marked worsening."}
+  },
+  gastroenteritis:{
+   typical:{ru:"Тошнота, рвота, диарея и боль или спазмы в животе.",uz:"Ko‘ngil aynishi, qusish, ich ketishi va qorin og‘rig‘i yoki spazmlari.",en:"Nausea, vomiting, diarrhea and abdominal pain or cramps."},
+   care:{ru:"Главная задача — поддерживать достаточное потребление жидкости. При признаках обезвоживания нужна медицинская оценка.",uz:"Asosiy maqsad yetarli suyuqlikni saqlashdir. Suvsizlanish belgilari bo‘lsa, tibbiy baholash kerak.",en:"Maintaining adequate fluid intake is important. Signs of dehydration require medical assessment."},
+   doctor:{ru:"Кровь в рвоте или стуле, сильная боль, выраженная слабость или признаки обезвоживания требуют помощи.",uz:"Qusishda yoki najasda qon, kuchli og‘riq, kuchli holsizlik yoki suvsizlanish belgilari yordamni talab qiladi.",en:"Blood in vomit or stool, severe pain, marked weakness or signs of dehydration require medical help."}
+  },
+  bronchitis:{
+   typical:{ru:"Кашель, иногда с мокротой; может сохраняться некоторое время после инфекции.",uz:"Yo‘tal, ba’zan balg‘am bilan; infeksiyadan keyin bir muddat davom etishi mumkin.",en:"Cough, sometimes with mucus; it can persist for some time after an infection."},
+   care:{ru:"Обычно важны отдых, питьё и наблюдение за симптомами. Причину кашля важно учитывать перед лечением.",uz:"Odatda dam olish, suyuqlik va alomatlarni kuzatish muhim. Davolashdan oldin yo‘tal sababini hisobga olish kerak.",en:"Rest, fluids and monitoring are commonly important. The cause of cough should be considered before treatment."},
+   doctor:{ru:"При одышке, боли в груди, крови в мокроте или выраженном ухудшении нужна медицинская оценка.",uz:"Nafas qisilishi, ko‘krak og‘rig‘i, balg‘amda qon yoki keskin yomonlashishda tibbiy baholash kerak.",en:"Seek medical assessment for shortness of breath, chest pain, blood in mucus or marked worsening."}
+  }
+ };
+ return data[condition.key];
 }
 
-else if(lang === "uz"){
-
-textarea.value =
-"burun oqishi, aksirish, ko‘z qichishishi";
-
+function medicineMiniHTML(ids){
+ if(!ids.length) return `<div class="result-warning">${t("noAuto")}</div>`;
+ return `<div class="analysis-medicines">${ids.map(id=>{
+  const m=medicines[id];
+  return `<button class="analysis-medicine" onclick="openMedicine('${id}')"><span>${m.icon}</span><strong>${m.names[lang]}</strong><small>${lang==='ru'?'Общая информация':lang==='uz'?'Umumiy ma’lumot':'General information'}</small></button>`;
+ }).join("")}</div>`;
 }
-
-else{
-
-textarea.value =
-"runny nose, sneezing, itchy eyes";
-
-}
-
-
-analyzeSymptoms();
-
-}
-
 
 function analyzeSymptoms(){
-
-const input =
-document
-.getElementById("symptoms")
-.value
-.trim()
-.toLowerCase();
-
-const result =
-document.getElementById("result");
-
-
-if(!input){
-
-result.innerHTML = `
-
-<div class="result-card">
-
-<h3>
-${t("enterSymptoms")}
-</h3>
-
-<p>
-${t("enterSymptomsDesc")}
-</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-result.innerHTML = `
-
-<div class="result-card">
-
-<h3>
-⏳ ${t("loading")}
-</h3>
-
-</div>
-
-`;
-
-
-setTimeout(()=>{
-
-const matches = db
-
-.map(category=>{
-
-let score = 0;
-
-let matched = [];
-
-
-category.keywords.forEach(keyword=>{
-
-if(input.includes(keyword)){
-
-score++;
-
-matched.push(keyword);
-
-}
-
-});
-
-
-return {
-...category,
-score,
-matched
-};
-
-})
-
-
-.filter(item=>item.score > 0)
-
-.sort(
-(a,b)=>b.score-a.score
-);
-
-
-if(!matches.length){
-
-result.innerHTML = `
-
-<div class="result-card">
-
-<h3>
-${t("notFound")}
-</h3>
-
-<p>
-${t("notFoundDesc")}
-</p>
-
-<div class="result-warning">
-
-${t("warning")}
-
-</div>
-
-</div>
-
-`;
-
-saveHistory(
-input,
-t("historyNo")
-);
-
-return;
-
-}
-
-
-const best =
-matches[0];
-
-
-const categoryNames = {
-
-cold:{
-ru:"Простудные симптомы",
-uz:"Shamollash alomatlari",
-en:"Cold-like symptoms"
-},
-
-allergy:{
-ru:"Симптомы аллергии",
-uz:"Allergiya alomatlari",
-en:"Allergy symptoms"
-},
-
-headache:{
-ru:"Головная боль",
-uz:"Bosh og‘rig‘i",
-en:"Headache"
-},
-
-fever:{
-ru:"Повышенная температура и ломота",
-uz:"Yuqori harorat va badan og‘rig‘i",
-en:"Fever and body aches"
-},
-
-stomach:{
-ru:"Тошнота и проблемы с желудком",
-uz:"Ko‘ngil aynishi va oshqozon muammolari",
-en:"Nausea and stomach problems"
-}
-
-};
-
-
-const descriptions = {
-
-cold:{
-ru:"Такие симптомы могут встречаться при простуде и других заболеваниях верхних дыхательных путей.",
-uz:"Bunday alomatlar shamollash va yuqori nafas yo‘llarining boshqa kasalliklarida uchrashi mumkin.",
-en:"These symptoms can occur with colds and other upper respiratory conditions."
-},
-
-allergy:{
-ru:"Чихание, зуд и слезящиеся глаза могут встречаться при аллергических реакциях.",
-uz:"Aksirish, qichishish va ko‘z yoshlanishi allergik reaksiyalarda uchrashi mumkin.",
-en:"Sneezing, itching and watery eyes can occur with allergic reactions."
-},
-
-headache:{
-ru:"Головная боль может иметь множество причин. Сайт не определяет её причину.",
-uz:"Bosh og‘rig‘ining ko‘plab sabablari bo‘lishi mumkin. Sayt sababni aniqlamaydi.",
-en:"Headaches can have many causes. The site does not determine the cause."
-},
-
-fever:{
-ru:"Повышенная температура и ломота могут встречаться при различных состояниях.",
-uz:"Yuqori harorat va badan og‘rig‘i turli holatlarda uchrashi mumkin.",
-en:"Fever and body aches can occur in different conditions."
-},
-
-stomach:{
-ru:"Тошнота и боль в животе могут иметь разные причины и иногда требуют консультации врача.",
-uz:"Ko‘ngil aynishi va qorin og‘rig‘ining turli sabablari bo‘lishi mumkin.",
-en:"Nausea and stomach pain can have different causes and may require medical advice."
-}
-
-};
-
-
-const categoryName =
-categoryNames[best.key][lang];
-
-
-const description =
-descriptions[best.key][lang];
-
-
-const medicineHTML =
-best.meds.length
-
-?
-
-`<div class="medicine-mini-grid">
-
-${best.meds.map(id=>`
-
-<div
-class="medicine-mini">
-
-<strong>
-
-${medicines[id].icon}
-
-${medicines[id].names[lang]}
-
-</strong>
-
-<small>
-${t("infoLink")}
-</small>
-
-</div>
-
-`).join("")}
-
-</div>`
-
-:
-
-`
-
-<div class="result-warning">
-
-${t("noAuto")}
-
-</div>
-
-`;
-
-
-result.innerHTML = `
-
-<div class="result-card">
-
-<h3>
-${categoryName}
-</h3>
-
-<p>
-${description}
-</p>
-
-<div class="matched">
-
-${best.matched
-.map(word=>`
-
-<span>
-${escapeHTML(word)}
-</span>
-
-`)
-.join("")}
-
-</div>
-
-${medicineHTML}
-
-<div class="result-warning">
-
-${t("resultOnly")}
-
-</div>
-
-</div>
-
-`;
-
-
-saveHistory(
-input,
-categoryName
-);
-
-
-result.scrollIntoView({
-behavior:"smooth",
-block:"start"
-});
-
-
-},450);
-
+ const raw=document.getElementById("symptoms").value.trim();
+ const input=normalizeText(raw);
+ const result=document.getElementById("result");
+
+ if(!input){
+  result.innerHTML=`<div class="result-card"><h3>${t("enterSymptoms")}</h3><p>${t("enterSymptomsDesc")}</p></div>`;
+  return;
+ }
+
+ result.innerHTML=`<div class="result-card"><h3>⏳ ${t("loading")}</h3><p>${lang==='ru'?'Система сопоставляет несколько признаков, а не только одно ключевое слово.':lang==='uz'?'Tizim bitta kalit so‘z emas, bir nechta belgini solishtirmoqda.':'The system is matching multiple symptoms rather than a single keyword.'}</p></div>`;
+
+ setTimeout(()=>{
+  const flags=detectRedFlags(input);
+  const scored=db.map(condition=>{
+   const r=scoreCondition(condition,input);
+   return {...condition,...r};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+
+  const top=scored.slice(0,3);
+
+  if(flags.length){
+   result.innerHTML=`<div class="result-card analysis-danger">
+    <div class="analysis-title-row"><span class="analysis-alert">🚨</span><div><div class="analysis-kicker">${lang==='ru'?'Важное предупреждение':lang==='uz'?'Muhim ogohlantirish':'Important warning'}</div><h3>${lang==='ru'?'Нужна срочная медицинская оценка':lang==='uz'?'Shoshilinch tibbiy baholash kerak':'Urgent medical assessment is needed'}</h3></div></div>
+    <p>${lang==='ru'?'В описании обнаружены симптомы, которые нельзя безопасно оценивать только через автоматический справочник. Не используйте результат MediGuide для выбора лечения.':lang==='uz'?'Ta’rifda avtomatik ma’lumotnoma orqali xavfsiz baholab bo‘lmaydigan belgilar aniqlandi. Davolashni tanlash uchun MediGuide natijasidan foydalanmang.':'Your description contains symptoms that should not be assessed only by an automated information tool. Do not use MediGuide to choose treatment.'}</p>
+    <div class="matched">${flags.slice(0,5).map(x=>`<span>⚠️ ${escapeHTML(x)}</span>`).join("")}</div>
+    <div class="result-warning">${lang==='ru'?'Обратитесь за медицинской помощью. При непосредственной угрозе жизни используйте местную экстренную службу.':lang==='uz'?'Tibbiy yordamga murojaat qiling. Hayot uchun bevosita xavf bo‘lsa, mahalliy tez yordam xizmatidan foydalaning.':'Seek medical care. If there is an immediate life threat, use your local emergency service.'}</div>
+   </div>`;
+   saveHistory(raw,lang==='ru'?"Требуется срочная оценка":lang==='uz'?"Shoshilinch baholash kerak":"Urgent assessment needed");
+   result.scrollIntoView({behavior:"smooth",block:"start"});
+   return;
+  }
+
+  if(!top.length){
+   result.innerHTML=`<div class="result-card"><h3>${t("notFound")}</h3><p>${t("notFoundDesc")}</p><div class="result-warning">${t("warning")}</div></div>`;
+   saveHistory(raw,t("historyNo"));
+   return;
+  }
+
+  const cards=top.map((condition,index)=>{
+   const extra=conditionExtra(condition);
+   const confidence=confidenceLabel(condition.score,index);
+   const matched=getLocalizedMatches(condition,condition.matched);
+   const maxScore=Math.max(...condition.symptoms.map(s=>condition.weights[s]||1));
+   const pct=Math.min(96,Math.max(18,Math.round((condition.score/(maxScore*3))*100)));
+   return `<article class="condition-card ${index===0?'condition-best':''}">
+    <div class="condition-header">
+     <div><div class="analysis-kicker">${index===0?(lang==='ru'?'Наиболее соответствующий вариант':lang==='uz'?'Eng mos variant':'Best matching option'):(lang==='ru'?'Также возможно':lang==='uz'?'Shuningdek mumkin':'Also possible')}</div><h3>${condition.name[lang]}</h3></div>
+     <div class="match-score"><strong>${pct}%</strong><small>${confidence[lang]}</small></div>
+    </div>
+    <div class="score-bar"><span style="width:${pct}%"></span></div>
+    <p>${condition.summary[lang]}</p>
+    <div class="analysis-section"><h4>🧩 ${lang==='ru'?'Почему система показала этот вариант':lang==='uz'?'Nega tizim bu variantni ko‘rsatdi':'Why this option appeared'}</h4><div class="matched">${matched.map(x=>`<span>✓ ${escapeHTML(x)}</span>`).join("")}</div></div>
+    <div class="analysis-grid">
+     <div><h4>📋 ${lang==='ru'?'Типичные признаки':lang==='uz'?'Odatdagi belgilar':'Typical features'}</h4><p>${extra.typical[lang]}</p></div>
+     <div><h4>ℹ️ ${lang==='ru'?'Что обычно делают':lang==='uz'?'Odatda nima qilinadi':'What is usually done'}</h4><p>${extra.care[lang]}</p></div>
+    </div>
+    <div class="analysis-section"><h4>💊 ${lang==='ru'?'Лекарства в справочнике':lang==='uz'?'Ma’lumotnomadagi dorilar':'Medicines in the guide'}</h4>${medicineMiniHTML(condition.meds)}</div>
+    <div class="analysis-section doctor-note"><h4>🩺 ${lang==='ru'?'Когда нужна медицинская оценка':lang==='uz'?'Qachon shifokorga murojaat qilish kerak':'When medical assessment is needed'}</h4><p>${extra.doctor[lang]}</p></div>
+   </article>`;
+  }).join("");
+
+  result.innerHTML=`<div class="result-card analysis-result">
+   <div class="analysis-title-row"><span class="analysis-icon">🔎</span><div><div class="analysis-kicker">${lang==='ru'?'Результат анализа':lang==='uz'?'Tahlil natijasi':'Analysis result'}</div><h3>${lang==='ru'?'Найдено несколько возможных вариантов':lang==='uz'?'Bir nechta mumkin bo‘lgan variant topildi':'Several possible matches found'}</h3></div></div>
+   <p>${lang==='ru'?'MediGuide сравнил несколько симптомов и показывает информационные варианты. Это не диагноз.':lang==='uz'?'MediGuide bir nechta alomatni solishtirdi va ma’lumot uchun variantlarni ko‘rsatmoqda. Bu tashxis emas.':'MediGuide compared multiple symptoms and shows informational possibilities. This is not a diagnosis.'}</p>
+   <div class="analysis-list">${cards}</div>
+   <div class="result-warning">${t("resultOnly")}</div>
+  </div>`;
+
+  saveHistory(raw,top[0].name[lang]);
+  result.scrollIntoView({behavior:"smooth",block:"start"});
+ },650);
 }
 
 
