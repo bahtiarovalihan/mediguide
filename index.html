@@ -1,1793 +1,2015 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f766e">
-<meta name="description" content="MediGuide — медицинский информационный помощник">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b84ff">
+<meta name="description" content="MediGuide — современный образовательный медицинский информационный помощник">
 <title>MediGuide</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+:root{
+  --bg:#f4f8ff;
+  --card:#fff;
+  --card2:#f8fbff;
+  --text:#102033;
+  --muted:#708095;
+  --line:#e1eaf3;
+  --p:#0b84ff;
+  --p2:#21c3ff;
+  --soft:#eaf5ff;
+  --danger:#e5484d;
+  --dangerbg:#fff0f0;
+  --warn:#d58c00;
+  --warnbg:#fff7df;
+  --ok:#16a36a;
+  --okbg:#eafaf3;
+  --shadow:0 22px 70px rgba(25,75,125,.1);
+  --sm:0 10px 30px rgba(25,75,125,.08);
+  --r:24px
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
+
+html{
+  scroll-behavior:smooth
+}
 
 body{
-font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-background:#f4f8f7;
-color:#17211f;
-line-height:1.6;
-transition:.25s
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 5% 0%,#dff4ff88,transparent 27%),
+    radial-gradient(circle at 100% 10%,#dff0ff88,transparent 25%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.55;
+  transition:.25s
 }
 
 body.dark{
---bg:#0b1514;
---card:#12201e;
---text:#edf7f5;
---muted:#a8b9b5;
---border:#263a37;
---light:#163d39;
---danger:#dc2626;
---danger-bg:#321819;
---warning:#d97706;
---warning-bg:#302817;
-background:var(--bg);
-color:var(--text)
-}
+  --bg:#07111d;
+  --card:#0d1b2a;
+  --card2:#112235;
+  --text:#edf6ff;
+  --muted:#9aabba;
+  --line:#20384f;
+  --p:#38a0ff;
+  --p2:#25c6ff;
+  --soft:#102d48;
+  --danger:#ff7c82;
+  --dangerbg:#381c21;
+  --warn:#f2bf52;
+  --warnbg:#3b3118;
+  --ok:#37ca8b;
+  --okbg:#103126;
 
-:root{
---primary:#0f766e;
---primary-dark:#0b5f59;
---bg:#f4f8f7;
---card:#fff;
---text:#17211f;
---muted:#66736f;
---border:#dce8e5;
---light:#dff7f3;
---danger:#dc2626;
---danger-bg:#fff1f1;
---warning:#d97706;
---warning-bg:#fff8e8;
---shadow:0 15px 45px rgba(15,118,110,.08);
---radius:24px
-}
-
-button,input,textarea,select{
-font:inherit
-}
-
-button{
-cursor:pointer
+  background:
+    radial-gradient(circle at 0 0,#16435a55,transparent 25%),
+    var(--bg)
 }
 
 a{
-text-decoration:none;
-color:inherit
+  text-decoration:none;
+  color:inherit
+}
+
+button,input,textarea,select{
+  font:inherit
+}
+
+button{
+  cursor:pointer
+}
+
+.wrap{
+  width:min(1180px,calc(100% - 36px));
+  margin:auto
 }
 
 /* HEADER */
 
 header{
-position:sticky;
-top:0;
-z-index:1000;
-background:rgba(255,255,255,.9);
-backdrop-filter:blur(18px);
-border-bottom:1px solid var(--border)
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#ffffffc9;
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line)
 }
 
 body.dark header{
-background:rgba(11,21,20,.92)
+  background:#07111dcc
 }
 
-.header-inner{
-width:min(1180px,calc(100% - 28px));
-min-height:76px;
-margin:auto;
-display:flex;
-align-items:center;
-gap:18px
+.head{
+  min-height:74px;
+  display:flex;
+  align-items:center;
+  gap:16px
 }
 
-.logo-area{
-display:flex;
-align-items:center;
-gap:10px;
-margin-right:auto
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-right:auto
 }
 
-.logo-icon{
-width:44px;
-height:44px;
-border-radius:14px;
-background:var(--primary);
-display:grid;
-place-items:center;
-color:#fff;
-font-size:22px
+.logoIcon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:22px;
+  box-shadow:0 12px 28px #0b84ff30
 }
 
-.logo-text{
-font-size:21px;
-font-weight:900
+.logoText{
+  font-size:21px;
+  font-weight:950;
+  letter-spacing:-.6px
 }
 
-.creator-top{
-font-size:10px;
-color:var(--primary);
-font-weight:800
+.creator{
+  font-size:9px;
+  color:var(--p);
+  font-weight:900
 }
 
 nav{
-display:flex;
-gap:24px
+  display:flex;
+  gap:22px
 }
 
 nav a{
-font-size:14px;
-font-weight:700;
-color:var(--muted)
+  font-size:13px;
+  color:var(--muted);
+  font-weight:800
 }
 
 nav a:hover{
-color:var(--primary)
+  color:var(--p)
 }
 
-.lang-select{
-height:44px;
-border:1px solid var(--border);
-border-radius:13px;
-background:var(--card);
-color:var(--text);
-padding:0 10px;
-font-weight:800;
-outline:none
+.lang,
+.theme{
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--card);
+  color:var(--text)
 }
 
-.theme-btn{
-width:44px;
-height:44px;
-border:1px solid var(--border);
-border-radius:13px;
-background:var(--card);
-color:var(--text)
+.lang{
+  padding:0 10px;
+  font-weight:800
+}
+
+.theme{
+  width:42px
 }
 
 /* HERO */
 
 .hero{
-width:min(1180px,calc(100% - 28px));
-margin:auto;
-padding:65px 0 50px;
-display:grid;
-grid-template-columns:1.05fr .95fr;
-gap:45px;
-align-items:center
+  padding:48px 0 24px
 }
 
-.badge{
-display:inline-flex;
-gap:7px;
-padding:8px 13px;
-border-radius:999px;
-background:var(--light);
-color:var(--primary);
-font-size:12px;
-font-weight:900;
-margin-bottom:18px
+.heroGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  align-items:stretch
+}
+
+.copy{
+  padding:22px 0
+}
+
+.pill{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:8px 12px;
+  border-radius:99px;
+  background:var(--soft);
+  color:var(--p);
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.6px
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  background:var(--p);
+  border-radius:50%;
+  box-shadow:0 0 0 5px #0b84ff18
 }
 
 .hero h1{
-font-size:clamp(40px,5vw,68px);
-line-height:1.03;
-letter-spacing:-2.5px;
-margin-bottom:20px
+  font-size:clamp(44px,6vw,76px);
+  line-height:.97;
+  letter-spacing:-3px;
+  margin:20px 0 17px;
+  max-width:690px
 }
 
-.hero h1 span{
-color:var(--primary)
+.accent{
+  color:var(--p)
 }
 
-.hero-description{
-font-size:17px;
-color:var(--muted);
-max-width:620px;
-margin-bottom:25px
+.heroDesc{
+  font-size:16px;
+  color:var(--muted);
+  max-width:650px
 }
 
-/* INPUT */
-
-.input-card{
-padding:24px;
-border-radius:var(--radius);
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow)
+.trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:20px
 }
 
-.input-label{
-font-size:14px;
-font-weight:900;
-display:block;
-margin-bottom:10px
+.trust span{
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:99px;
+  background:#ffffff9c;
+  font-size:11px;
+  font-weight:800;
+  color:var(--muted)
+}
+
+body.dark .trust span{
+  background:#0d1b2a99
+}
+
+/* ANALYZER */
+
+.analyzer{
+  background:linear-gradient(180deg,#fffefef2,#f7fbfff2);
+  border:1px solid var(--line);
+  border-radius:30px;
+  padding:22px;
+  box-shadow:var(--shadow)
+}
+
+body.dark .analyzer{
+  background:linear-gradient(180deg,#0d1b2af5,#112235f5)
+}
+
+.aTop{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:start
+}
+
+.aTop h2{
+  font-size:20px;
+  letter-spacing:-.6px
+}
+
+.aTop p{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px
+}
+
+.online{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:var(--okbg);
+  color:var(--ok);
+  font-size:10px;
+  font-weight:900;
+  padding:7px 9px;
+  border-radius:99px;
+  white-space:nowrap
+}
+
+.online i{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--ok)
 }
 
 textarea{
-width:100%;
-min-height:125px;
-resize:vertical;
-border:1px solid var(--border);
-border-radius:17px;
-padding:15px;
-background:var(--bg);
-color:var(--text);
-outline:none
+  width:100%;
+  min-height:145px;
+  resize:vertical;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--card);
+  color:var(--text);
+  padding:15px;
+  margin-top:14px;
+  outline:0;
+  font-size:14px
 }
 
-textarea:focus,
-input:focus{
-border-color:var(--primary);
-box-shadow:0 0 0 4px rgba(15,118,110,.1)
+textarea:focus{
+  border-color:#0b84ff66;
+  box-shadow:0 0 0 4px #0b84ff12
 }
 
-.quick-title{
-font-size:12px;
-color:var(--muted);
-font-weight:800;
-margin:15px 0 9px
+.quickTitle{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:900;
+  margin:12px 0 8px
 }
 
-.quick-buttons{
-display:flex;
-flex-wrap:wrap;
-gap:8px
+.quick{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px
 }
 
-.quick-btn{
-border:1px solid var(--border);
-background:var(--bg);
-color:var(--text);
-padding:8px 11px;
-border-radius:999px;
-font-size:12px;
-font-weight:700
+.quick button{
+  padding:9px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:13px;
+  font-size:11px;
+  font-weight:800
 }
 
-.action-buttons{
-display:grid;
-grid-template-columns:1fr auto auto;
-gap:9px;
-margin-top:17px
+.quick button:hover{
+  transform:translateY(-1px);
+  border-color:#0b84ff55
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1.4fr .8fr .45fr;
+  gap:9px;
+  margin-top:13px
 }
 
 .btn{
-min-height:50px;
-padding:0 17px;
-border-radius:14px;
-border:1px solid transparent;
-font-weight:900
+  border:0;
+  border-radius:14px;
+  padding:11px 13px;
+  font-weight:950;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px
 }
 
-.btn-primary{
-background:var(--primary);
-color:#fff
+.primary{
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  color:#fff;
+  box-shadow:0 13px 28px #0b84ff2b
 }
 
-.btn-primary:hover{
-background:var(--primary-dark)
+.secondary{
+  background:var(--soft);
+  color:var(--p)
 }
 
-.btn-secondary{
-background:var(--light);
-color:var(--primary)
+.clear{
+  background:var(--card2);
+  border:1px solid var(--line);
+  color:var(--muted)
 }
 
-.btn-clear{
-width:50px;
-background:var(--card);
-border-color:var(--border);
-color:var(--muted)
+.note{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:11px
 }
 
-/* ILLUSTRATION */
+/* VISUAL */
 
-.illustration{
-min-height:420px;
-border-radius:34px;
-background:
-radial-gradient(
-circle at 50% 30%,
-rgba(15,118,110,.16),
-transparent 55%
-),
-var(--light);
-border:1px solid var(--border);
-display:grid;
-place-items:center;
-position:relative;
-overflow:hidden
+.visual{
+  position:relative;
+  min-height:100%;
+  border-radius:30px;
+  overflow:hidden;
+  padding:24px;
+  background:linear-gradient(145deg,#dff5ff,#edf8ff 55%,#e7f2ff);
+  border:1px solid #dcecf8;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:flex-end
 }
 
-.doctor{
-width:190px;
-height:270px;
-position:relative
+body.dark .visual{
+  background:linear-gradient(145deg,#0b2538,#0d2235 55%,#102a3e);
+  border-color:#1c3d55
 }
 
-.doctor-head{
-position:absolute;
-width:92px;
-height:92px;
-border-radius:50%;
-background:#f1c7a8;
-top:25px;
-left:49px;
-z-index:2
+.visual:before{
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border-radius:50%;
+  right:-110px;
+  top:-110px;
+  background:#29c6ff35;
+  filter:blur(8px)
 }
 
-.doctor-hair{
-position:absolute;
-width:95px;
-height:48px;
-border-radius:50px 50px 20px 20px;
-background:#30343b;
-top:17px;
-left:47px;
-z-index:3
+.grid{
+  position:absolute;
+  inset:0;
+  opacity:.5;
+  background-image:
+    linear-gradient(#fff4 1px,transparent 1px),
+    linear-gradient(90deg,#fff4 1px,transparent 1px);
+  background-size:30px 30px
 }
 
-.doctor-body{
-position:absolute;
-width:150px;
-height:160px;
-background:#fff;
-border-radius:35px 35px 18px 18px;
-left:20px;
-top:110px;
-box-shadow:0 15px 35px rgba(0,0,0,.1)
+.visualTag{
+  position:absolute;
+  top:22px;
+  left:22px;
+  padding:8px 10px;
+  border-radius:99px;
+  background:#ffffffb8;
+  border:1px solid #ffffffd0;
+  color:#36748f;
+  font-size:10px;
+  font-weight:950;
+  z-index:2
 }
 
-.doctor-shirt{
-position:absolute;
-width:75px;
-height:140px;
-background:#edf7f5;
-left:37px;
-top:15px;
-border-radius:15px
+body.dark .visualTag{
+  background:#07111d66;
+  border-color:#2b5973;
+  color:#9adfff
 }
 
-.doctor-cross{
-position:absolute;
-left:65px;
-top:50px;
-color:var(--primary);
-font-size:28px;
-font-weight:900
+.float{
+  position:absolute;
+  z-index:3;
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:#ffffffbd;
+  border:1px solid #ffffffd8;
+  display:grid;
+  place-items:center;
+  box-shadow:0 12px 28px #23608020;
+  font-size:20px;
+  animation:up 4s ease-in-out infinite
 }
 
-.medical-icon{
-position:absolute;
-width:58px;
-height:58px;
-display:grid;
-place-items:center;
-border-radius:18px;
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow);
-font-size:25px;
-animation:float 4s ease-in-out infinite
+.f1{
+  left:10%;
+  top:20%
 }
 
-.icon-1{
-top:55px;
-left:45px
+.f2{
+  right:9%;
+  top:30%;
+  animation-delay:.4s
 }
 
-.icon-2{
-top:80px;
-right:45px;
-animation-delay:.7s
+.f3{
+  left:8%;
+  bottom:17%;
+  animation-delay:.8s
 }
 
-.icon-3{
-bottom:60px;
-left:65px;
-animation-delay:1.2s
+.f4{
+  right:11%;
+  bottom:13%;
+  animation-delay:1.2s
 }
 
-.icon-4{
-bottom:50px;
-right:55px;
-animation-delay:1.7s
+@keyframes up{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
 }
 
-@keyframes float{
-50%{
-transform:translateY(-10px)
+.doctorBox{
+  position:relative;
+  z-index:2;
+  width:min(300px,74%);
+  margin:0 auto;
+  background:#ffffffdd;
+  border:1px solid #fff;
+  border-radius:32px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 24px 60px #23587820;
+  backdrop-filter:blur(10px)
 }
+
+body.dark .doctorBox{
+  background:#0d1b2acc;
+  border-color:#244963
+}
+
+.avatar{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  margin:-70px auto 11px;
+  border:9px solid #fffc;
+  background:linear-gradient(180deg,#c6eeff,#8bc9ec);
+  display:grid;
+  place-items:center;
+  font-size:66px;
+  box-shadow:0 15px 34px #23587825
+}
+
+.doctorBox h3{
+  font-size:20px
+}
+
+.doctorBox p{
+  font-size:11px;
+  color:var(--muted)
 }
 
 /* RESULT */
 
 #result{
-width:min(1180px,calc(100% - 28px));
-margin:0 auto 25px
+  width:min(1180px,calc(100% - 36px));
+  margin:22px auto
 }
 
-.result-card{
-padding:25px;
-border-radius:var(--radius);
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow);
-animation:appear .3s
+.result{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:22px;
+  box-shadow:var(--sm)
 }
 
-@keyframes appear{
-from{
-opacity:0;
-transform:translateY(8px)
-}
-to{
-opacity:1;
-transform:none
-}
+.rTop{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:start;
+  margin-bottom:18px
 }
 
-.result-card h3{
-font-size:24px;
-margin-bottom:8px
+.eyebrow{
+  font-size:10px;
+  color:var(--p);
+  font-weight:950;
+  letter-spacing:1.2px;
+  text-transform:uppercase
 }
 
-.result-card p{
-color:var(--muted)
+.rTop h3{
+  font-size:23px;
+  letter-spacing:-.7px;
+  margin-top:2px
 }
 
-.matched{
-display:flex;
-flex-wrap:wrap;
-gap:7px;
-margin-top:15px
+.rTop p{
+  font-size:12px;
+  color:var(--muted);
+  max-width:760px
 }
 
-.matched span{
-background:var(--light);
-color:var(--primary);
-border-radius:999px;
-padding:6px 10px;
-font-size:12px;
-font-weight:800
+.chip{
+  background:var(--soft);
+  color:var(--p);
+  font-size:10px;
+  font-weight:950;
+  padding:7px 9px;
+  border-radius:99px;
+  white-space:nowrap
 }
 
-.result-warning{
-margin-top:16px;
-padding:13px 15px;
-border-radius:14px;
-background:var(--warning-bg);
-color:var(--warning);
-font-size:13px
+.loading{
+  text-align:center;
+  padding:22px
 }
 
-.medicine-mini-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-gap:10px;
-margin-top:16px
+.ring{
+  width:32px;
+  height:32px;
+  border:3px solid var(--soft);
+  border-top-color:var(--p);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:0 auto 9px
 }
 
-.medicine-mini{
-padding:14px;
-border-radius:16px;
-background:var(--bg);
-border:1px solid var(--border)
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
 
-.medicine-mini small{
-color:var(--muted)
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px
 }
 
-/* EMERGENCY */
-
-.emergency{
-width:min(1180px,calc(100% - 28px));
-margin:15px auto 0;
-padding:22px;
-border-radius:20px;
-background:var(--danger-bg);
-border:1px solid rgba(220,38,38,.2);
-color:var(--danger)
+.cond{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:21px;
+  padding:17px
 }
 
-.emergency h3{
-margin-bottom:7px
+.cond.best{
+  border-color:#0b84ff55;
+  box-shadow:0 12px 30px #0b84ff12
 }
 
-.emergency ul{
-padding-left:20px
+.condHead{
+  display:flex;
+  justify-content:space-between;
+  gap:8px
+}
+
+.cond h4{
+  font-size:16px
+}
+
+.score{
+  background:var(--soft);
+  color:var(--p);
+  padding:6px 8px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:950
+}
+
+.track{
+  height:7px;
+  background:var(--line);
+  border-radius:99px;
+  overflow:hidden;
+  margin:10px 0
+}
+
+.fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--p),var(--p2));
+  border-radius:99px
+}
+
+.cond p{
+  font-size:11px;
+  color:var(--muted)
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px
+}
+
+.tag{
+  background:var(--soft);
+  color:var(--p);
+  border-radius:99px;
+  padding:5px 7px;
+  font-size:9px;
+  font-weight:850
+}
+
+.box{
+  margin-top:10px;
+  padding:10px 11px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--card);
+  font-size:10px;
+  color:var(--muted)
+}
+
+.box strong{
+  display:block;
+  color:var(--text);
+  margin-bottom:2px
+}
+
+.mini{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px
+}
+
+.miniCard{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--card)
+}
+
+.miniIcon{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:var(--soft);
+  font-size:16px
+}
+
+.miniCard strong{
+  font-size:10px
+}
+
+.miniCard small{
+  display:block;
+  color:var(--muted);
+  font-size:8px
+}
+
+.warning{
+  margin-top:13px;
+  padding:12px;
+  background:var(--warnbg);
+  border:1px solid #d58c0030;
+  border-radius:14px;
+  font-size:11px
+}
+
+.urgentBox{
+  padding:15px;
+  background:var(--dangerbg);
+  border:1px solid #e5484d30;
+  border-radius:16px;
+  font-size:12px
+}
+
+.urgentBox strong{
+  display:block;
+  margin-bottom:6px
+}
+
+.empty{
+  padding:22px;
+  border:1px dashed var(--line);
+  border-radius:16px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--card)
 }
 
 /* SECTIONS */
 
-.section{
-width:min(1180px,calc(100% - 28px));
-margin:auto;
-padding:75px 0
+section.section{
+  padding:65px 0
 }
 
-.section-heading{
-margin-bottom:30px;
-max-width:700px
+.heading{
+  max-width:720px;
+  margin-bottom:24px
 }
 
-.section-heading h2{
-font-size:clamp(30px,4vw,45px);
-line-height:1.1;
-margin-bottom:10px
+.heading .eyebrow{
+  margin-bottom:7px
 }
 
-.section-heading p{
-color:var(--muted)
+.heading h2{
+  font-size:clamp(30px,4vw,45px);
+  line-height:1.05;
+  letter-spacing:-1.7px
 }
 
-/* STEPS */
+.heading p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:7px
+}
+
+.emergency{
+  margin:0 auto;
+  width:min(1180px,calc(100% - 36px));
+  padding:20px;
+  background:var(--dangerbg);
+  border:1px solid #e5484d2b;
+  border-radius:22px
+}
+
+.emergency h3{
+  font-size:17px
+}
+
+.emergency p,
+.emergency li{
+  font-size:12px;
+  color:var(--muted)
+}
+
+.emergency ul{
+  padding-left:18px;
+  margin-top:6px
+}
+
+/* STEPS / FEATURES */
 
 .steps,
 .features{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:17px
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px
 }
 
 .step,
-.feature{
-padding:23px;
-border-radius:21px;
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow)
+.feature,
+.medicine{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:21px;
+  padding:20px;
+  box-shadow:var(--sm)
 }
 
-.step-number{
-width:43px;
-height:43px;
-border-radius:13px;
-background:var(--light);
-color:var(--primary);
-display:grid;
-place-items:center;
-font-weight:900;
-margin-bottom:15px
+.stepNum,
+.featureIcon,
+.medIcon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:var(--soft);
+  display:grid;
+  place-items:center;
+  color:var(--p);
+  font-weight:950;
+  font-size:13px;
+  margin-bottom:15px
+}
+
+.featureIcon,
+.medIcon{
+  font-size:19px
+}
+
+.step h3,
+.feature h3,
+.medicine h3{
+  font-size:16px
 }
 
 .step p,
-.feature p{
-color:var(--muted);
-font-size:14px
-}
-
-.feature-icon{
-font-size:27px;
-margin-bottom:12px
+.feature p,
+.medicine p{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px
 }
 
 /* MEDICINES */
 
-.medicine-search{
-display:flex;
-gap:9px;
-margin-bottom:22px
+.search{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  margin-bottom:15px
 }
 
-.medicine-search input{
-flex:1;
-height:52px;
-border:1px solid var(--border);
-border-radius:15px;
-padding:0 15px;
-background:var(--card);
-color:var(--text);
-outline:none
+.search input{
+  height:51px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--card);
+  color:var(--text);
+  padding:0 15px;
+  outline:0
 }
 
-.medicine-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:17px
+.medicineGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px
 }
 
-.medicine-card{
-padding:21px;
-border-radius:21px;
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow)
+.medicineTop{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:11px
 }
 
-.medicine-top{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:10px
+.medIcon{
+  margin:0;
+  font-size:20px
 }
 
-.medicine-icon{
-width:46px;
-height:46px;
-border-radius:14px;
-background:var(--light);
-display:grid;
-place-items:center
+.medicineInfo{
+  margin-top:9px;
+  padding:9px 10px;
+  background:var(--card2);
+  border-radius:12px;
+  font-size:10px;
+  color:var(--muted)
 }
 
-.medicine-card p{
-color:var(--muted);
-font-size:14px;
-margin-bottom:10px
+.medicineInfo strong{
+  display:block;
+  color:var(--text);
+  margin-bottom:2px
 }
 
-.medicine-info{
-padding:11px 13px;
-border-radius:13px;
-background:var(--bg);
-font-size:13px;
-margin-top:8px
-}
-
-.medicine-info strong{
-display:block;
-margin-bottom:3px
-}
-
-.medicine-open{
-border:0;
-background:transparent;
-color:var(--primary);
-font-weight:900;
-padding:12px 0 0
+.more{
+  margin-top:11px;
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:9px;
+  background:var(--soft);
+  color:var(--p);
+  font-size:11px;
+  font-weight:950
 }
 
 /* PRIVACY */
 
 .privacy{
-padding:23px;
-border-radius:21px;
-background:var(--light);
-box-shadow:none
-}
-
-.privacy h3{
-color:var(--primary);
-margin-bottom:7px
+  padding:20px;
+  background:linear-gradient(135deg,var(--soft),var(--card));
+  border:1px solid var(--line);
+  border-radius:22px
 }
 
 .privacy p{
-color:var(--muted);
-font-size:14px
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px
 }
 
 /* HISTORY */
 
-.history-list{
-display:flex;
-flex-direction:column;
-gap:9px
+.history{
+  display:grid;
+  gap:9px
 }
 
-.history-item{
-padding:15px 17px;
-border-radius:16px;
-display:flex;
-justify-content:space-between;
-gap:15px;
-background:var(--card);
-border:1px solid var(--border);
-box-shadow:var(--shadow)
+.hItem{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:center;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:13px 15px
 }
 
-.history-item small{
-color:var(--muted);
-display:block
+.hItem strong,
+.hItem small{
+  font-size:11px
 }
 
-.empty-history{
-text-align:center;
-padding:19px;
-color:var(--muted);
-border:1px dashed var(--border);
-border-radius:16px
+.hItem small{
+  display:block;
+  color:var(--muted);
+  margin-top:2px
 }
 
-.clear-history{
-margin-top:14px;
-background:transparent;
-border:1px solid var(--border);
-color:var(--muted);
-padding:9px 14px;
-border-radius:12px;
-font-weight:800
+.clearHistory{
+  margin-top:11px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--muted);
+  border-radius:12px;
+  padding:9px 12px;
+  font-size:11px;
+  font-weight:900
 }
 
 /* FAQ */
 
 .faq{
-display:flex;
-flex-direction:column;
-gap:9px
+  display:grid;
+  gap:9px
 }
 
-.faq-item{
-border-radius:17px;
-overflow:hidden;
-background:var(--card);
-border:1px solid var(--border)
+.faqItem{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  overflow:hidden
 }
 
-.faq-question{
-width:100%;
-border:0;
-background:transparent;
-color:var(--text);
-padding:17px;
-display:flex;
-justify-content:space-between;
-text-align:left;
-font-weight:900
+.faqQ{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:var(--text);
+  padding:15px 16px;
+  text-align:left;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  font-size:12px;
+  font-weight:900
 }
 
-.faq-answer{
-display:none;
-padding:0 17px 17px;
-color:var(--muted);
-font-size:14px
+.faqA{
+  max-height:0;
+  overflow:hidden;
+  padding:0 16px;
+  color:var(--muted);
+  font-size:11px;
+  transition:.25s
 }
 
-.faq-item.active .faq-answer{
-display:block
-}
-
-.faq-question span{
-font-size:21px;
-transition:.2s
-}
-
-.faq-item.active .faq-question span{
-transform:rotate(45deg)
+.faqItem.active .faqA{
+  max-height:180px;
+  padding:0 16px 15px
 }
 
 /* MODAL */
 
 .modal{
-display:none;
-position:fixed;
-inset:0;
-z-index:2000;
-background:rgba(0,0,0,.55);
-padding:15px;
-align-items:center;
-justify-content:center
+  position:fixed;
+  inset:0;
+  background:#04101a99;
+  backdrop-filter:blur(7px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:3000
 }
 
 .modal.active{
-display:flex
+  display:flex
 }
 
-.modal-content{
-width:min(600px,100%);
-max-height:88vh;
-overflow:auto;
-background:var(--card);
-color:var(--text);
-border-radius:23px;
-padding:26px;
-border:1px solid var(--border);
-position:relative
+.modalBox{
+  position:relative;
+  width:min(560px,100%);
+  max-height:88vh;
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 40px 100px #0004
 }
 
-.modal-close{
-position:absolute;
-top:13px;
-right:13px;
-width:40px;
-height:40px;
-border-radius:12px;
-border:1px solid var(--border);
-background:var(--bg);
-color:var(--text)
+.close{
+  position:absolute;
+  right:13px;
+  top:13px;
+  width:37px;
+  height:37px;
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:11px
 }
 
-.modal-content h2{
-padding-right:45px;
-margin-bottom:12px
+.modalBox h2{
+  font-size:24px;
+  margin-bottom:7px
+}
+
+.modalBox>p{
+  font-size:12px;
+  color:var(--muted)
 }
 
 /* FOOTER */
 
 footer{
-background:#0b1514;
-color:#fff;
-padding:50px 16px;
-margin-top:25px;
-text-align:center
+  margin-top:30px;
+  background:#071321;
+  color:#dce9f6;
+  text-align:center;
+  padding:44px 18px
 }
 
-.footer-logo{
-font-size:24px;
-font-weight:900
+.footerLogo{
+  font-size:20px;
+  font-weight:950
 }
 
-.footer-text{
-max-width:550px;
-margin:7px auto;
-color:#9fb1ad;
-font-size:14px
+.footerText{
+  max-width:650px;
+  margin:7px auto 0;
+  color:#91a5b8;
+  font-size:11px
 }
 
-.created-by{
-display:inline-flex;
-margin-top:20px;
-padding:10px 17px;
-border-radius:999px;
-background:rgba(255,255,255,.08);
-font-weight:800
+.created{
+  margin-top:15px;
+  color:#738ba1;
+  font-size:10px
 }
 
-.created-by span{
-color:#5eead4;
-margin-left:5px
+.created b{
+  color:#fff
 }
 
-/* TABLET */
+/* RESPONSIVE */
 
-@media(max-width:900px){
+@media(max-width:950px){
+  nav{
+    display:none
+  }
 
-.hero{
-grid-template-columns:1fr
+  .heroGrid{
+    grid-template-columns:1fr
+  }
+
+  .visual{
+    min-height:390px
+  }
+
+  .cards{
+    grid-template-columns:1fr
+  }
+
+  .features,
+  .steps{
+    grid-template-columns:repeat(2,1fr)
+  }
 }
 
-.steps,
-.features{
-grid-template-columns:1fr
+@media(max-width:650px){
+  .wrap,
+  #result,
+  .emergency{
+    width:calc(100% - 22px)
+  }
+
+  .head{
+    min-height:66px;
+    gap:7px
+  }
+
+  .logoIcon{
+    width:39px;
+    height:39px
+  }
+
+  .logoText{
+    font-size:18px
+  }
+
+  .creator{
+    font-size:8px
+  }
+
+  .lang{
+    max-width:104px;
+    height:39px;
+    font-size:10px
+  }
+
+  .theme{
+    width:39px;
+    height:39px
+  }
+
+  .hero{
+    padding-top:30px
+  }
+
+  .hero h1{
+    font-size:43px;
+    letter-spacing:-2.2px
+  }
+
+  .analyzer{
+    padding:17px;
+    border-radius:23px
+  }
+
+  .quick{
+    grid-template-columns:1fr 1fr
+  }
+
+  .actions{
+    grid-template-columns:1fr 1fr
+  }
+
+  .primary{
+    grid-column:1/-1
+  }
+
+  .visual{
+    min-height:320px;
+    border-radius:23px
+  }
+
+  .doctorBox{
+    width:75%
+  }
+
+  .avatar{
+    width:106px;
+    height:106px;
+    margin:-60px auto 9px;
+    font-size:59px
+  }
+
+  .search,
+  .medicineGrid{
+    grid-template-columns:1fr
+  }
+
+  .search .btn{
+    width:100%
+  }
+
+  .steps,
+  .features{
+    grid-template-columns:1fr
+  }
+
+  .section{
+    padding:52px 0
+  }
+
+  .heading h2{
+    font-size:32px
+  }
+
+  .rTop{
+    flex-direction:column
+  }
+
+  .mini{
+    grid-template-columns:1fr
+  }
+
+  .hItem{
+    align-items:flex-start;
+    flex-direction:column
+  }
 }
 
-.medicine-grid{
-grid-template-columns:1fr
+@media(max-width:420px){
+  .hero h1{
+    font-size:38px
+  }
+
+  .aTop{
+    flex-direction:column
+  }
+
+  .online{
+    align-self:flex-start
+  }
+
+  .visual{
+    min-height:300px
+  }
+
+  .float{
+    width:40px;
+    height:40px;
+    font-size:17px
+  }
 }
-
-nav{
-display:none
-}
-
-}
-
-/* MOBILE */
-
-@media(max-width:600px){
-
-.header-inner{
-min-height:64px
-}
-
-.logo-icon{
-width:39px;
-height:39px
-}
-
-.logo-text{
-font-size:18px
-}
-
-.creator-top{
-font-size:9px
-}
-
-.lang-select{
-height:40px;
-max-width:105px
-}
-
-.theme-btn{
-width:40px;
-height:40px
-}
-
-.hero{
-padding:38px 0 30px
-}
-
-.hero h1{
-font-size:39px;
-letter-spacing:-1.8px
-}
-
-.hero-description{
-font-size:15px
-}
-
-.input-card{
-padding:16px;
-border-radius:20px
-}
-
-.quick-buttons{
-display:grid;
-grid-template-columns:1fr 1fr
-}
-
-.quick-btn{
-width:100%;
-font-size:11px
-}
-
-.action-buttons{
-grid-template-columns:1fr 1fr
-}
-
-.btn-primary{
-grid-column:1/-1
-}
-
-.illustration{
-min-height:280px;
-border-radius:25px
-}
-
-.doctor{
-transform:scale(.7)
-}
-
-.medical-icon{
-width:44px;
-height:44px;
-font-size:19px
-}
-
-.icon-1{
-top:30px;
-left:20px
-}
-
-.icon-2{
-top:40px;
-right:20px
-}
-
-.icon-3{
-bottom:30px;
-left:30px
-}
-
-.icon-4{
-bottom:25px;
-right:25px
-}
-
-.medicine-search{
-flex-direction:column
-}
-
-.medicine-search .btn{
-width:100%
-}
-
-.history-item{
-flex-direction:column
-}
-
-.section{
-padding:52px 0
-}
-
-.section-heading h2{
-font-size:29px
-}
-
-}
-
-/* ===============================
-   MEDIGUIDE 2.0 ANALYSIS UI
-   =============================== */
-.analysis-result{overflow:hidden}
-.analysis-title-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
-.analysis-icon,.analysis-alert{width:48px;height:48px;min-width:48px;border-radius:15px;display:grid;place-items:center;background:var(--light);font-size:24px}
-.analysis-alert{background:var(--danger-bg)}
-.analysis-kicker{text-transform:uppercase;letter-spacing:.08em;font-size:10px;font-weight:900;color:var(--primary);margin-bottom:3px}
-.analysis-list{display:flex;flex-direction:column;gap:15px;margin-top:20px}
-.condition-card{padding:21px;border:1px solid var(--border);border-radius:21px;background:var(--bg)}
-.condition-best{border-color:rgba(15,118,110,.35);box-shadow:0 10px 30px rgba(15,118,110,.07)}
-.condition-header{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
-.condition-header h3{margin:0;font-size:21px}
-.match-score{min-width:105px;text-align:right}
-.match-score strong{display:block;font-size:20px;color:var(--primary)}
-.match-score small{display:block;color:var(--muted);font-size:10px;font-weight:800}
-.score-bar{height:7px;background:var(--border);border-radius:999px;overflow:hidden;margin:12px 0 15px}
-.score-bar span{display:block;height:100%;background:var(--primary);border-radius:999px}
-.analysis-section{margin-top:17px}
-.analysis-section h4,.analysis-grid h4{font-size:13px;margin-bottom:7px}
-.analysis-section p,.analysis-grid p{font-size:13px;color:var(--muted);margin:0}
-.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}
-.analysis-grid>div{padding:14px;border:1px solid var(--border);border-radius:15px;background:var(--card)}
-.analysis-medicines{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px}
-.analysis-medicine{display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;text-align:left;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--card);color:var(--text)}
-.analysis-medicine span{grid-row:1/3;font-size:22px}
-.analysis-medicine strong{font-size:13px}
-.analysis-medicine small{font-size:10px;color:var(--muted)}
-.doctor-note{padding:14px;border-radius:15px;background:var(--warning-bg)}
-.analysis-danger{border-color:rgba(220,38,38,.35)}
-.analysis-danger .analysis-kicker{color:var(--danger)}
-@media(max-width:600px){.analysis-grid{grid-template-columns:1fr}.condition-header{flex-direction:column}.match-score{text-align:left}.analysis-medicines{grid-template-columns:1fr}.analysis-title-row{gap:10px}}
-
 </style>
 </head>
 
 <body>
 
 <header>
+  <div class="wrap head">
 
-<div class="header-inner">
+    <a class="logo" href="#home">
+      <div class="logoIcon">🩺</div>
 
-<a href="#home" class="logo-area">
+      <div>
+        <div class="logoText">MediGuide</div>
+        <div class="creator">Created by Alikhan</div>
+      </div>
+    </a>
 
-<div class="logo-icon">
-🩺
-</div>
+    <nav>
+      <a href="#home" data-i18n="navHome">Главная</a>
+      <a href="#medicines" data-i18n="navMedicines">Лекарства</a>
+      <a href="#how" data-i18n="navHow">Как работает</a>
+      <a href="#history" data-i18n="navHistory">История</a>
+    </nav>
 
-<div>
+    <select id="languageSelect" class="lang">
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="uz">🇺🇿 O‘zbek</option>
+      <option value="en">🇬🇧 English</option>
+    </select>
 
-<div class="logo-text">
-MediGuide
-</div>
+    <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
 
-<div class="creator-top">
-Created by Alikhan
-</div>
-
-</div>
-
-</a>
-
-<nav>
-
-<a href="#home" data-i18n="navHome">
-Главная
-</a>
-
-<a href="#medicines" data-i18n="navMedicines">
-Лекарства
-</a>
-
-<a href="#how" data-i18n="navHow">
-Как работает
-</a>
-
-<a href="#history" data-i18n="navHistory">
-История
-</a>
-
-</nav>
-
-<select id="languageSelect" class="lang-select">
-
-<option value="ru">
-🇷🇺 Русский
-</option>
-
-<option value="uz">
-🇺🇿 O‘zbek
-</option>
-
-<option value="en">
-🇬🇧 English
-</option>
-
-</select>
-
-<button
-class="theme-btn"
-id="themeBtn"
-onclick="toggleTheme()">
-🌙
-</button>
-
-</div>
-
+  </div>
 </header>
-
 
 <main id="home">
 
 <section class="hero">
 
-<div>
+  <div class="wrap heroGrid">
 
-<div class="badge">
-🧪 MEDIGUIDE <span>DEMO</span>
-</div>
+    <div class="copy">
 
-<h1>
+      <div class="pill">
+        <span class="dot"></span>
+        MEDIGUIDE 3.0 • EDUCATION
+      </div>
 
-<span data-i18n="hero1">
-Заботьтесь о здоровье
-</span>
+      <h1>
+        <span data-i18n="hero1">
+          Заботьтесь о здоровье
+        </span>
 
-<span data-i18n="hero2">
-осознанно.
-</span>
+        <span class="accent" data-i18n="hero2">
+          осознанно.
+        </span>
+      </h1>
 
-</h1>
+      <p class="heroDesc" data-i18n="heroDesc">
+        Опишите свои симптомы и получите образовательную информацию о возможных причинах и связанных категориях лекарств.
+      </p>
 
-<p
-class="hero-description"
-data-i18n="heroDesc">
+      <div class="trust">
+        <span>🔒 Local data</span>
+        <span>⚡ Browser-based</span>
+        <span>📱 Responsive</span>
+      </div>
 
-Опишите свои симптомы и получите образовательную информацию о возможных причинах и связанных категориях лекарств.
+    </div>
 
-</p>
 
+    <div class="analyzer">
 
-<div class="input-card">
+      <div class="aTop">
 
-<label
-class="input-label"
-for="symptoms"
-data-i18n="symptomLabel">
+        <div>
+          <h2 data-i18n="symptomLabel">
+            Что вас беспокоит?
+          </h2>
 
-Что вас беспокоит?
+          <p>
+            Опишите симптомы своими словами
+          </p>
+        </div>
 
-</label>
+        <div class="online">
+          <i></i>
+          Offline engine
+        </div>
 
-<textarea
-id="symptoms"
-data-i18n-placeholder="symptomPlaceholder"
-placeholder="Например: насморк, чихание и зуд в глазах...">
-</textarea>
+      </div>
 
 
-<div
-class="quick-title"
-data-i18n="quick">
+      <textarea
+        id="symptoms"
+        data-i18n-placeholder="symptomPlaceholder"
+        placeholder="Например: насморк, чихание и зуд в глазах..."
+      ></textarea>
 
-Быстрый выбор:
 
-</div>
+      <div class="quickTitle" data-i18n="quick">
+        Быстрый выбор:
+      </div>
 
 
-<div class="quick-buttons">
+      <div class="quick">
 
-<button
-class="quick-btn"
-onclick="addSymptom('runnyNose')">
+        <button onclick="addSymptom('runnyNose')">
+          🤧
+          <span data-i18n="runnyNose">Насморк</span>
+        </button>
 
-🤧
+        <button onclick="addSymptom('temperature')">
+          🌡️
+          <span data-i18n="temperature">Температура</span>
+        </button>
 
-<span data-i18n="runnyNose">
-Насморк
-</span>
+        <button onclick="addSymptom('headache')">
+          🤕
+          <span data-i18n="headache">Головная боль</span>
+        </button>
 
-</button>
+        <button onclick="addSymptom('cough')">
+          😷
+          <span data-i18n="cough">Кашель</span>
+        </button>
 
+        <button onclick="addSymptom('nausea')">
+          🤢
+          <span data-i18n="nausea">Тошнота</span>
+        </button>
 
-<button
-class="quick-btn"
-onclick="addSymptom('temperature')">
+        <button onclick="addSymptom('sneeze')">
+          🤧
+          <span data-i18n="sneeze">Чихание</span>
+        </button>
 
-🌡️
+      </div>
 
-<span data-i18n="temperature">
-Температура
-</span>
 
-</button>
+      <div class="actions">
 
+        <button
+          class="btn primary"
+          onclick="analyzeSymptoms()"
+        >
+          🔍
+          <span data-i18n="analyze">
+            Анализировать
+          </span>
+        </button>
 
-<button
-class="quick-btn"
-onclick="addSymptom('headache')">
 
-🤕
+        <button
+          class="btn secondary"
+          onclick="demoMode()"
+        >
+          ✨
+          <span data-i18n="demo">
+            Demo
+          </span>
+        </button>
 
-<span data-i18n="headache">
-Головная боль
-</span>
 
-</button>
+        <button
+          class="btn clear"
+          onclick="clearSymptoms()"
+        >
+          ✕
+        </button>
 
+      </div>
 
-<button
-class="quick-btn"
-onclick="addSymptom('cough')">
 
-😷
+      <div class="note">
+        ⚠️ MediGuide — информационный проект. Результаты не являются диагнозом.
+      </div>
 
-<span data-i18n="cough">
-Кашель
-</span>
+    </div>
 
-</button>
-
-
-<button
-class="quick-btn"
-onclick="addSymptom('nausea')">
-
-🤢
-
-<span data-i18n="nausea">
-Тошнота
-</span>
-
-</button>
-
-
-<button
-class="quick-btn"
-onclick="addSymptom('sneeze')">
-
-🤧
-
-<span data-i18n="sneeze">
-Чихание
-</span>
-
-</button>
-
-</div>
-
-
-<div class="action-buttons">
-
-<button
-class="btn btn-primary"
-onclick="analyzeSymptoms()">
-
-🔍
-
-<span data-i18n="analyze">
-Анализировать
-</span>
-
-</button>
-
-
-<button
-class="btn btn-secondary"
-onclick="demoMode()">
-
-✨
-
-<span data-i18n="demo">
-Demo
-</span>
-
-</button>
-
-
-<button
-class="btn btn-clear"
-onclick="clearSymptoms()">
-
-✕
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="illustration">
-
-<div class="medical-icon icon-1">
-🩺
-</div>
-
-<div class="medical-icon icon-2">
-💊
-</div>
-
-<div class="medical-icon icon-3">
-❤️
-</div>
-
-<div class="medical-icon icon-4">
-🧬
-</div>
-
-
-<div class="doctor">
-
-<div class="doctor-hair">
-</div>
-
-<div class="doctor-head">
-</div>
-
-<div class="doctor-body">
-
-<div class="doctor-shirt">
-</div>
-
-<div class="doctor-cross">
-+
-</div>
-
-</div>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
-<div id="result">
-</div>
+<section class="wrap">
+
+  <div class="visual">
+
+    <div class="grid"></div>
+
+    <div class="visualTag">
+      🩺 MEDICAL INFORMATION
+    </div>
+
+    <div class="float f1">
+      🩺
+    </div>
+
+    <div class="float f2">
+      💊
+    </div>
+
+    <div class="float f3">
+      ❤️
+    </div>
+
+    <div class="float f4">
+      🧬
+    </div>
 
 
-<section class="emergency">
+    <div class="doctorBox">
 
-<h3 data-i18n="emergencyTitle">
-🚨 Когда нужна срочная помощь
-</h3>
+      <div class="avatar">
+        🧑‍⚕️
+      </div>
 
-<p data-i18n="emergencyText">
+      <h3>
+        MediGuide Assistant
+      </h3>
 
-MediGuide не заменяет врача. При серьёзных или быстро ухудшающихся симптомах необходимо обратиться за медицинской помощью.
+      <p>
+        Educational health information
+      </p>
 
-</p>
+    </div>
 
-<ul>
-
-<li data-i18n="em1">
-сильная боль или резкое ухудшение состояния;
-</li>
-
-<li data-i18n="em2">
-затруднённое дыхание;
-</li>
-
-<li data-i18n="em3">
-потеря сознания или выраженная слабость;
-</li>
-
-<li data-i18n="em4">
-сильная аллергическая реакция;
-</li>
-
-<li data-i18n="em5">
-другие симптомы, которые вызывают серьёзное беспокойство.
-</li>
-
-</ul>
+  </div>
 
 </section>
+
+
+<div id="result"></div>
+
+
+<div class="emergency">
+
+  <h3 data-i18n="emergencyTitle">
+    🚨 Когда нужна срочная помощь
+  </h3>
+
+  <p data-i18n="emergencyText">
+    MediGuide не заменяет врача. При серьёзных или быстро ухудшающихся симптомах необходимо обратиться за медицинской помощью.
+  </p>
+
+  <ul>
+
+    <li data-i18n="em1">
+      сильная боль или резкое ухудшение состояния;
+    </li>
+
+    <li data-i18n="em2">
+      затруднённое дыхание;
+    </li>
+
+    <li data-i18n="em3">
+      потеря сознания или выраженная слабость;
+    </li>
+
+    <li data-i18n="em4">
+      сильная аллергическая реакция;
+    </li>
+
+    <li data-i18n="em5">
+      другие симптомы, которые вызывают серьёзное беспокойство.
+    </li>
+
+  </ul>
+
+</div>
 
 
 <section class="section" id="how">
 
-<div class="section-heading">
+  <div class="wrap">
 
-<h2 data-i18n="howTitle">
-Как это работает?
-</h2>
+    <div class="heading">
 
-<p data-i18n="howDesc">
-Три простых шага для получения образовательной медицинской информации.
-</p>
+      <div class="eyebrow">
+        MediGuide
+      </div>
 
-</div>
+      <h2 data-i18n="howTitle">
+        Как это работает?
+      </h2>
 
+      <p data-i18n="howDesc">
+        Три простых шага для получения образовательной медицинской информации.
+      </p>
 
-<div class="steps">
-
-<div class="step">
-
-<div class="step-number">
-01
-</div>
-
-<h3 data-i18n="step1Title">
-Опишите симптомы
-</h3>
-
-<p data-i18n="step1Desc">
-Напишите, что именно вас беспокоит, или воспользуйтесь быстрыми кнопками.
-</p>
-
-</div>
+    </div>
 
 
-<div class="step">
+    <div class="steps">
 
-<div class="step-number">
-02
-</div>
+      <div class="step">
 
-<h3 data-i18n="step2Title">
-Получите информацию
-</h3>
+        <div class="stepNum">
+          01
+        </div>
 
-<p data-i18n="step2Desc">
-Система сопоставит введённые слова с информационными категориями.
-</p>
+        <h3 data-i18n="step1Title">
+          Опишите симптомы
+        </h3>
 
-</div>
+        <p data-i18n="step1Desc">
+          Напишите, что именно вас беспокоит, или воспользуйтесь быстрыми кнопками.
+        </p>
 
-
-<div class="step">
-
-<div class="step-number">
-03
-</div>
-
-<h3 data-i18n="step3Title">
-Изучите результат
-</h3>
-
-<p data-i18n="step3Desc">
-Вы увидите возможные категории и общую информацию о лекарствах.
-</p>
-
-</div>
-
-</div>
-
-</section>
+      </div>
 
 
-<section
-class="section"
-id="medicines">
+      <div class="step">
 
-<div class="section-heading">
+        <div class="stepNum">
+          02
+        </div>
 
-<h2 data-i18n="medTitle">
-Справочник лекарств
-</h2>
+        <h3 data-i18n="step2Title">
+          Получите информацию
+        </h3>
 
-<p data-i18n="medDesc">
-Поиск общей информации о распространённых лекарствах.
-</p>
+        <p data-i18n="step2Desc">
+          Система сопоставит введённые слова с информационными категориями.
+        </p>
 
-</div>
-
-
-<div class="medicine-search">
-
-<input
-id="medicineInput"
-data-i18n-placeholder="medicinePlaceholder"
-placeholder="Например: парацетамол"
-onkeydown="if(event.key==='Enter')searchMedicine()">
-
-<button
-class="btn btn-primary"
-onclick="searchMedicine()">
-
-🔎
-
-<span data-i18n="find">
-Найти
-</span>
-
-</button>
-
-</div>
+      </div>
 
 
-<div
-class="medicine-grid"
-id="medicineResult">
-</div>
+      <div class="step">
+
+        <div class="stepNum">
+          03
+        </div>
+
+        <h3 data-i18n="step3Title">
+          Изучите результат
+        </h3>
+
+        <p data-i18n="step3Desc">
+          Вы увидите возможные категории и общую информацию о лекарствах.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<section class="section">
+<section class="section" id="medicines">
 
-<div class="section-heading">
+  <div class="wrap">
 
-<h2 data-i18n="whyTitle">
-Почему MediGuide?
-</h2>
+    <div class="heading">
 
-<p data-i18n="whyDesc">
-Проект создан как простой и понятный образовательный инструмент.
-</p>
+      <div class="eyebrow">
+        REFERENCE
+      </div>
 
-</div>
+      <h2 data-i18n="medTitle">
+        Справочник лекарств
+      </h2>
 
+      <p data-i18n="medDesc">
+        Поиск общей информации о распространённых лекарствах.
+      </p>
 
-<div class="features">
-
-
-<div class="feature">
-
-<div class="feature-icon">
-🔎
-</div>
-
-<h3 data-i18n="f1t">
-Умный поиск
-</h3>
-
-<p data-i18n="f1d">
-Система ищет совпадения между введёнными симптомами и информационной базой проекта.
-</p>
-
-</div>
+    </div>
 
 
-<div class="feature">
+    <div class="search">
 
-<div class="feature-icon">
-🔒
-</div>
+      <input
+        id="medicineInput"
+        data-i18n-placeholder="medicinePlaceholder"
+        placeholder="Например: парацетамол"
+        onkeydown="if(event.key==='Enter')searchMedicine()"
+      >
 
-<h3 data-i18n="f2t">
-Приватность
-</h3>
+      <button
+        class="btn primary"
+        onclick="searchMedicine()"
+      >
+        🔎
+        <span data-i18n="find">
+          Найти
+        </span>
+      </button>
 
-<p data-i18n="f2d">
-История хранится локально в браузере пользователя.
-</p>
-
-</div>
-
-
-<div class="feature">
-
-<div class="feature-icon">
-⚡
-</div>
-
-<h3 data-i18n="f3t">
-Быстро
-</h3>
-
-<p data-i18n="f3d">
-Основные функции работают прямо в браузере без сложной установки.
-</p>
-
-</div>
+    </div>
 
 
-<div class="feature">
+    <div
+      id="medicineResult"
+      class="medicineGrid"
+    ></div>
 
-<div class="feature-icon">
-📱
-</div>
-
-<h3 data-i18n="f4t">
-Для телефона
-</h3>
-
-<p data-i18n="f4d">
-Интерфейс адаптирован для смартфонов, планшетов и компьютеров.
-</p>
-
-</div>
-
-
-<div class="feature">
-
-<div class="feature-icon">
-🌙
-</div>
-
-<h3 data-i18n="f5t">
-Dark Mode
-</h3>
-
-<p data-i18n="f5d">
-Переключайтесь между светлой и тёмной темой.
-</p>
-
-</div>
-
-
-<div class="feature">
-
-<div class="feature-icon">
-✨
-</div>
-
-<h3 data-i18n="f6t">
-Demo Mode
-</h3>
-
-<p data-i18n="f6d">
-Можно быстро посмотреть пример работы системы.
-</p>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
 <section class="section">
 
-<div class="privacy">
+  <div class="wrap">
 
-<h3 data-i18n="privacyTitle">
-🔐 Важная информация о приватности
-</h3>
+    <div class="heading">
 
-<p data-i18n="privacyText">
+      <div class="eyebrow">
+        PRODUCT
+      </div>
 
-MediGuide является демонстрационным образовательным проектом. Введённые данные не отправляются на сервер в рамках этой версии сайта. История анализа хранится только в локальном хранилище браузера.
+      <h2 data-i18n="whyTitle">
+        Почему MediGuide?
+      </h2>
 
-</p>
+      <p data-i18n="whyDesc">
+        Проект создан как простой и понятный образовательный инструмент.
+      </p>
 
-</div>
-
-</section>
-
-
-<section
-class="section"
-id="history">
-
-<div class="section-heading">
-
-<h2 data-i18n="historyTitle">
-История
-</h2>
-
-<p data-i18n="historyDesc">
-Последние результаты анализа, сохранённые на этом устройстве.
-</p>
-
-</div>
+    </div>
 
 
-<div
-class="history-list"
-id="historyList">
-</div>
+    <div class="features">
+
+      <div class="feature">
+
+        <div class="featureIcon">
+          🔎
+        </div>
+
+        <h3 data-i18n="f1t">
+          Умный поиск
+        </h3>
+
+        <p data-i18n="f1d">
+          Система ищет совпадения между введёнными симптомами и информационной базой проекта.
+        </p>
+
+      </div>
 
 
-<button
-class="clear-history"
-onclick="clearHistory()">
+      <div class="feature">
 
-🗑️
+        <div class="featureIcon">
+          🔒
+        </div>
 
-<span data-i18n="clearHistory">
-Очистить историю
-</span>
+        <h3 data-i18n="f2t">
+          Приватность
+        </h3>
 
-</button>
+        <p data-i18n="f2d">
+          История хранится локально в браузере пользователя.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="featureIcon">
+          ⚡
+        </div>
+
+        <h3 data-i18n="f3t">
+          Быстро
+        </h3>
+
+        <p data-i18n="f3d">
+          Основные функции работают прямо в браузере.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="featureIcon">
+          📱
+        </div>
+
+        <h3 data-i18n="f4t">
+          Для телефона
+        </h3>
+
+        <p data-i18n="f4d">
+          Интерфейс адаптирован для смартфонов, планшетов и компьютеров.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="featureIcon">
+          🌙
+        </div>
+
+        <h3 data-i18n="f5t">
+          Dark Mode
+        </h3>
+
+        <p data-i18n="f5d">
+          Переключайтесь между светлой и тёмной темой.
+        </p>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="featureIcon">
+          ✨
+        </div>
+
+        <h3 data-i18n="f6t">
+          Demo Mode
+        </h3>
+
+        <p data-i18n="f6d">
+          Можно быстро посмотреть пример работы системы.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
 <section class="section">
 
-<div class="section-heading">
+  <div class="wrap">
 
-<h2 data-i18n="faqTitle">
-Частые вопросы
-</h2>
+    <div class="privacy">
 
-</div>
+      <h3 data-i18n="privacyTitle">
+        🔐 Важная информация о приватности
+      </h3>
 
+      <p data-i18n="privacyText">
+        MediGuide является демонстрационным образовательным проектом. Введённые данные не отправляются на сервер в рамках этой версии сайта. История анализа хранится только в локальном хранилище браузера.
+      </p>
 
-<div class="faq">
+    </div>
 
+  </div>
 
-<div class="faq-item">
-
-<button
-class="faq-question"
-onclick="toggleFAQ(this)">
-
-<span data-i18n="faq1q">
-Что такое MediGuide?
-</span>
-
-<span>
-+
-</span>
-
-</button>
-
-<div
-class="faq-answer"
-data-i18n="faq1a">
-
-MediGuide — демонстрационный образовательный проект, который помогает находить общую информацию о симптомах и лекарствах.
-
-</div>
-
-</div>
+</section>
 
 
-<div class="faq-item">
+<section class="section" id="history">
 
-<button
-class="faq-question"
-onclick="toggleFAQ(this)">
+  <div class="wrap">
 
-<span data-i18n="faq2q">
-Может ли MediGuide поставить диагноз?
-</span>
+    <div class="heading">
 
-<span>
-+
-</span>
+      <div class="eyebrow">
+        LOCAL
+      </div>
 
-</button>
+      <h2 data-i18n="historyTitle">
+        История
+      </h2>
 
-<div
-class="faq-answer"
-data-i18n="faq2a">
+      <p data-i18n="historyDesc">
+        Последние результаты анализа, сохранённые на этом устройстве.
+      </p>
 
-Нет. Сайт не ставит диагнозы и не заменяет врача. Результаты предназначены только для ознакомления.
-
-</div>
-
-</div>
+    </div>
 
 
-<div class="faq-item">
-
-<button
-class="faq-question"
-onclick="toggleFAQ(this)">
-
-<span data-i18n="faq3q">
-Можно ли использовать сайт вместо врача?
-</span>
-
-<span>
-+
-</span>
-
-</button>
-
-<div
-class="faq-answer"
-data-i18n="faq3a">
-
-Нет. При ухудшении состояния или серьёзных симптомах необходимо обратиться к медицинскому специалисту.
-
-</div>
-
-</div>
+    <div
+      id="historyList"
+      class="history"
+    ></div>
 
 
-<div class="faq-item">
+    <button
+      class="clearHistory"
+      onclick="clearHistory()"
+    >
+      🗑️
+      <span data-i18n="clearHistory">
+        Очистить историю
+      </span>
+    </button>
 
-<button
-class="faq-question"
-onclick="toggleFAQ(this)">
+  </div>
 
-<span data-i18n="faq4q">
-Где хранится история?
-</span>
+</section>
 
-<span>
-+
-</span>
 
-</button>
+<section class="section">
 
-<div
-class="faq-answer"
-data-i18n="faq4a">
+  <div class="wrap">
 
-В этой демонстрационной версии история сохраняется локально в браузере пользователя.
+    <div class="heading">
 
-</div>
+      <div class="eyebrow">
+        FAQ
+      </div>
 
-</div>
+      <h2 data-i18n="faqTitle">
+        Частые вопросы
+      </h2>
 
-</div>
+    </div>
+
+
+    <div class="faq">
+
+      <div class="faqItem">
+
+        <button
+          class="faqQ"
+          onclick="toggleFAQ(this)"
+        >
+
+          <span data-i18n="faq1q">
+            Что такое MediGuide?
+          </span>
+
+          <span>
+            +
+          </span>
+
+        </button>
+
+
+        <div
+          class="faqA"
+          data-i18n="faq1a"
+        >
+          MediGuide — демонстрационный образовательный проект, который помогает находить общую информацию о симптомах и лекарствах.
+        </div>
+
+      </div>
+
+
+      <div class="faqItem">
+
+        <button
+          class="faqQ"
+          onclick="toggleFAQ(this)"
+        >
+
+          <span data-i18n="faq2q">
+            Может ли MediGuide поставить диагноз?
+          </span>
+
+          <span>
+            +
+          </span>
+
+        </button>
+
+
+        <div
+          class="faqA"
+          data-i18n="faq2a"
+        >
+          Нет. Сайт не ставит диагнозы и не заменяет врача. Результаты предназначены только для ознакомления.
+        </div>
+
+      </div>
+
+
+      <div class="faqItem">
+
+        <button
+          class="faqQ"
+          onclick="toggleFAQ(this)"
+        >
+
+          <span data-i18n="faq3q">
+            Можно ли использовать сайт вместо врача?
+          </span>
+
+          <span>
+            +
+          </span>
+
+        </button>
+
+
+        <div
+          class="faqA"
+          data-i18n="faq3a"
+        >
+          Нет. При ухудшении состояния или серьёзных симптомах необходимо обратиться к медицинскому специалисту.
+        </div>
+
+      </div>
+
+
+      <div class="faqItem">
+
+        <button
+          class="faqQ"
+          onclick="toggleFAQ(this)"
+        >
+
+          <span data-i18n="faq4q">
+            Где хранится история?
+          </span>
+
+          <span>
+            +
+          </span>
+
+        </button>
+
+
+        <div
+          class="faqA"
+          data-i18n="faq4a"
+        >
+          В этой демонстрационной версии история сохраняется локально в браузере пользователя.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
@@ -1795,51 +2017,43 @@ data-i18n="faq4a">
 
 
 <div
-class="modal"
-id="medicineModal"
-onclick="if(event.target===this)closeModal()">
+  class="modal"
+  id="medicineModal"
+  onclick="if(event.target===this)closeModal()"
+>
 
-<div class="modal-content">
+  <div class="modalBox">
 
-<button
-class="modal-close"
-onclick="closeModal()">
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      ✕
+    </button>
 
-✕
+    <div id="modalContent"></div>
 
-</button>
-
-<div id="modalContent">
-</div>
-
-</div>
+  </div>
 
 </div>
 
 
 <footer>
 
-<div class="footer-logo">
-🩺 MediGuide
-</div>
+  <div class="footerLogo">
+    🩺 MediGuide
+  </div>
 
-<p
-class="footer-text"
-data-i18n="footerText">
+  <p
+    class="footerText"
+    data-i18n="footerText"
+  >
+    Образовательный проект о медицинской информации. Не является заменой консультации медицинского специалиста.
+  </p>
 
-Образовательный проект о медицинской информации. Не является заменой консультации медицинского специалиста.
-
-</p>
-
-<div class="created-by">
-
-Created by
-
-<span>
-Alikhan
-</span>
-
-</div>
+  <div class="created">
+    Created by <b>Alikhan</b>
+  </div>
 
 </footer>
 
@@ -1848,8 +2062,7 @@ Alikhan
 
 const T = {
 
-ru: {
-
+ru:{
 navHome:"Главная",
 navMedicines:"Лекарства",
 navHow:"Как работает",
@@ -1861,7 +2074,6 @@ hero2:"осознанно.",
 heroDesc:"Опишите свои симптомы и получите образовательную информацию о возможных причинах и связанных категориях лекарств.",
 
 symptomLabel:"Что вас беспокоит?",
-
 symptomPlaceholder:"Например: насморк, чихание и зуд в глазах...",
 
 quick:"Быстрый выбор:",
@@ -1891,51 +2103,39 @@ howTitle:"Как это работает?",
 howDesc:"Три простых шага для получения образовательной медицинской информации.",
 
 step1Title:"Опишите симптомы",
-
 step1Desc:"Напишите, что именно вас беспокоит, или воспользуйтесь быстрыми кнопками.",
 
 step2Title:"Получите информацию",
-
 step2Desc:"Система сопоставит введённые слова с информационными категориями.",
 
 step3Title:"Изучите результат",
-
 step3Desc:"Вы увидите возможные категории и общую информацию о лекарствах.",
 
 medTitle:"Справочник лекарств",
-
 medDesc:"Поиск общей информации о распространённых лекарствах.",
 
 medicinePlaceholder:"Например: парацетамол",
-
 find:"Найти",
 
 whyTitle:"Почему MediGuide?",
-
 whyDesc:"Проект создан как простой и понятный образовательный инструмент.",
 
 f1t:"Умный поиск",
-
 f1d:"Система ищет совпадения между введёнными симптомами и информационной базой проекта.",
 
 f2t:"Приватность",
-
 f2d:"История хранится локально в браузере пользователя.",
 
 f3t:"Быстро",
-
-f3d:"Основные функции работают прямо в браузере без сложной установки.",
+f3d:"Основные функции работают прямо в браузере.",
 
 f4t:"Для телефона",
-
 f4d:"Интерфейс адаптирован для смартфонов, планшетов и компьютеров.",
 
 f5t:"Dark Mode",
-
 f5d:"Переключайтесь между светлой и тёмной темой.",
 
 f6t:"Demo Mode",
-
 f6d:"Можно быстро посмотреть пример работы системы.",
 
 privacyTitle:"🔐 Важная информация о приватности",
@@ -1943,7 +2143,6 @@ privacyTitle:"🔐 Важная информация о приватности",
 privacyText:"MediGuide является демонстрационным образовательным проектом. Введённые данные не отправляются на сервер в рамках этой версии сайта. История анализа хранится только в локальном хранилище браузера.",
 
 historyTitle:"История",
-
 historyDesc:"Последние результаты анализа, сохранённые на этом устройстве.",
 
 clearHistory:"Очистить историю",
@@ -1951,29 +2150,23 @@ clearHistory:"Очистить историю",
 faqTitle:"Частые вопросы",
 
 faq1q:"Что такое MediGuide?",
-
 faq1a:"MediGuide — демонстрационный образовательный проект, который помогает находить общую информацию о симптомах и лекарствах.",
 
 faq2q:"Может ли MediGuide поставить диагноз?",
-
 faq2a:"Нет. Сайт не ставит диагнозы и не заменяет врача. Результаты предназначены только для ознакомления.",
 
 faq3q:"Можно ли использовать сайт вместо врача?",
-
 faq3a:"Нет. При ухудшении состояния или серьёзных симптомах необходимо обратиться к медицинскому специалисту.",
 
 faq4q:"Где хранится история?",
-
 faq4a:"В этой демонстрационной версии история сохраняется локально в браузере пользователя.",
 
 footerText:"Образовательный проект о медицинской информации. Не является заменой консультации медицинского специалиста.",
 
 enterSymptoms:"Введите симптомы",
-
 enterSymptomsDesc:"Опишите, что вас беспокоит, чтобы получить информационный результат.",
 
 notFound:"Информация не найдена",
-
 notFoundDesc:"Мы не нашли подходящую категорию в демонстрационной базе.",
 
 warning:"⚠️ Это не означает, что с вами обязательно всё в порядке или что у вас нет заболевания. При беспокойстве обратитесь к медицинскому специалисту.",
@@ -1985,25 +2178,22 @@ noAuto:"💡 Для этой категории лекарства автома�
 more:"Подробнее →",
 
 safety:"Безопасность",
-
 important:"Важно",
 
 medicineNotFound:"Лекарство не найдено.",
 
 historyEmpty:"История пока пустая.",
 
-infoLink:"Нажмите в справочнике лекарств для подробной информации.",
+infoLink:"Откройте справочник лекарств для подробной информации.",
 
 modalWarning:"⚠️ Эта информация не является индивидуальной рекомендацией по лечению.",
 
 loading:"Анализируем симптомы…",
 
 historyNo:"Не найдено"
-
 },
 
-
-uz: {
+uz:{
 
 navHome:"Bosh sahifa",
 navMedicines:"Dorilar",
@@ -2046,51 +2236,39 @@ howTitle:"Bu qanday ishlaydi?",
 howDesc:"Ta’limiy tibbiy ma’lumot olish uchun uchta oddiy qadam.",
 
 step1Title:"Alomatlarni yozing",
-
 step1Desc:"Sizni nima bezovta qilayotganini yozing yoki tezkor tugmalardan foydalaning.",
 
 step2Title:"Ma’lumot oling",
-
 step2Desc:"Tizim kiritilgan so‘zlarni axborot toifalari bilan solishtiradi.",
 
 step3Title:"Natijani o‘rganing",
-
 step3Desc:"Mumkin bo‘lgan toifalar va dorilar haqida umumiy ma’lumotni ko‘rasiz.",
 
 medTitle:"Dorilar ma’lumotnomasi",
-
 medDesc:"Keng tarqalgan dorilar haqida umumiy ma’lumot qidiring.",
 
 medicinePlaceholder:"Masalan: paratsetamol",
-
 find:"Topish",
 
 whyTitle:"Nega MediGuide?",
-
 whyDesc:"Loyiha oddiy va tushunarli ta’limiy vosita sifatida yaratilgan.",
 
 f1t:"Aqlli qidiruv",
-
 f1d:"Tizim kiritilgan alomatlarni loyiha ma’lumotlar bazasi bilan solishtiradi.",
 
 f2t:"Maxfiylik",
-
 f2d:"Tarix foydalanuvchi brauzerida mahalliy saqlanadi.",
 
 f3t:"Tez",
-
 f3d:"Asosiy funksiyalar brauzerda ishlaydi.",
 
 f4t:"Telefon uchun",
-
 f4d:"Interfeys telefon, planshet va kompyuterlarga moslashtirilgan.",
 
 f5t:"Dark Mode",
-
 f5d:"Yorug‘ va qorong‘i mavzu o‘rtasida almashing.",
 
 f6t:"Demo Mode",
-
 f6d:"Tizim ishini tezda namuna orqali ko‘rishingiz mumkin.",
 
 privacyTitle:"🔐 Maxfiylik haqida muhim ma’lumot",
@@ -2098,7 +2276,6 @@ privacyTitle:"🔐 Maxfiylik haqida muhim ma’lumot",
 privacyText:"MediGuide ta’limiy demo loyihadir. Ushbu versiyada kiritilgan ma’lumotlar serverga yuborilmaydi. Tahlil tarixi faqat brauzerning mahalliy xotirasida saqlanadi.",
 
 historyTitle:"Tarix",
-
 historyDesc:"Ushbu qurilmada saqlangan so‘nggi tahlil natijalari.",
 
 clearHistory:"Tarixni tozalash",
@@ -2106,29 +2283,23 @@ clearHistory:"Tarixni tozalash",
 faqTitle:"Ko‘p beriladigan savollar",
 
 faq1q:"MediGuide nima?",
-
 faq1a:"MediGuide — alomatlar va dorilar haqida umumiy ma’lumot olishga yordam beruvchi ta’limiy demo loyiha.",
 
 faq2q:"MediGuide tashxis qo‘ya oladimi?",
-
 faq2a:"Yo‘q. Sayt tashxis qo‘ymaydi va shifokor o‘rnini bosmaydi. Natijalar faqat ma’lumot uchun.",
 
 faq3q:"Saytdan shifokor o‘rniga foydalanish mumkinmi?",
-
 faq3a:"Yo‘q. Holat yomonlashsa yoki jiddiy alomatlar bo‘lsa, tibbiy mutaxassisga murojaat qiling.",
 
 faq4q:"Tarix qayerda saqlanadi?",
-
 faq4a:"Demo versiyada tarix foydalanuvchi brauzerida mahalliy saqlanadi.",
 
 footerText:"Tibbiy ma’lumotlar haqidagi ta’limiy loyiha. Tibbiy mutaxassis maslahatining o‘rnini bosmaydi.",
 
 enterSymptoms:"Alomatlarni kiriting",
-
 enterSymptomsDesc:"Ma’lumotli natija olish uchun sizni nima bezovta qilayotganini yozing.",
 
 notFound:"Ma’lumot topilmadi",
-
 notFoundDesc:"Demo bazada mos toifa topilmadi.",
 
 warning:"⚠️ Bu sizda albatta muammo yo‘q yoki kasallik yo‘q degani emas. Xavotir bo‘lsa, tibbiy mutaxassisga murojaat qiling.",
@@ -2140,7 +2311,6 @@ noAuto:"💡 Ushbu toifa uchun dorilar avtomatik tavsiya qilinmaydi.",
 more:"Batafsil →",
 
 safety:"Xavfsizlik",
-
 important:"Muhim",
 
 medicineNotFound:"Dori topilmadi.",
@@ -2154,11 +2324,9 @@ modalWarning:"⚠️ Ushbu ma’lumot individual davolash tavsiyasi emas.",
 loading:"Alomatlar tahlil qilinmoqda…",
 
 historyNo:"Topilmadi"
-
 },
 
-
-en: {
+en:{
 
 navHome:"Home",
 navMedicines:"Medicines",
@@ -2201,19 +2369,15 @@ howTitle:"How does it work?",
 howDesc:"Three simple steps to get educational medical information.",
 
 step1Title:"Describe symptoms",
-
 step1Desc:"Write what is bothering you or use the quick buttons.",
 
 step2Title:"Get information",
-
 step2Desc:"The system matches your words with information categories.",
 
 step3Title:"Review the result",
-
 step3Desc:"You will see possible categories and general medicine information.",
 
 medTitle:"Medicine guide",
-
 medDesc:"Search for general information about common medicines.",
 
 medicinePlaceholder:"For example: paracetamol",
@@ -2221,31 +2385,24 @@ medicinePlaceholder:"For example: paracetamol",
 find:"Find",
 
 whyTitle:"Why MediGuide?",
-
 whyDesc:"The project was created as a simple and clear educational tool.",
 
 f1t:"Smart search",
-
 f1d:"The system matches entered symptoms with the project's information database.",
 
 f2t:"Privacy",
-
 f2d:"History is stored locally in the user's browser.",
 
 f3t:"Fast",
-
 f3d:"Core functions work directly in the browser.",
 
 f4t:"Mobile friendly",
-
 f4d:"The interface is adapted for phones, tablets and computers.",
 
 f5t:"Dark Mode",
-
 f5d:"Switch between light and dark themes.",
 
 f6t:"Demo Mode",
-
 f6d:"Quickly see an example of how the system works.",
 
 privacyTitle:"🔐 Important privacy information",
@@ -2261,29 +2418,23 @@ clearHistory:"Clear history",
 faqTitle:"Frequently asked questions",
 
 faq1q:"What is MediGuide?",
-
 faq1a:"MediGuide is an educational demo project that helps find general information about symptoms and medicines.",
 
 faq2q:"Can MediGuide diagnose a condition?",
-
 faq2a:"No. The site does not diagnose conditions and does not replace a doctor. Results are for information only.",
 
 faq3q:"Can I use the site instead of a doctor?",
-
 faq3a:"No. If your condition worsens or symptoms are serious, contact a medical professional.",
 
 faq4q:"Where is history stored?",
-
 faq4a:"In this demo version, history is stored locally in the user's browser.",
 
 footerText:"An educational project about medical information. It does not replace advice from a medical professional.",
 
 enterSymptoms:"Enter symptoms",
-
 enterSymptomsDesc:"Describe what is bothering you to get an informational result.",
 
 notFound:"No information found",
-
 notFoundDesc:"We could not find a matching category in the demo database.",
 
 warning:"⚠️ This does not mean that everything is necessarily fine or that you do not have a condition. If concerned, contact a medical professional.",
@@ -2295,7 +2446,6 @@ noAuto:"💡 Medicines are not automatically suggested for this category.",
 more:"More →",
 
 safety:"Safety",
-
 important:"Important",
 
 medicineNotFound:"Medicine not found.",
@@ -2315,805 +2465,1724 @@ historyNo:"Not found"
 };
 
 
-const symptomWords = {
+const symptomWords={
 
 ru:{
-runnyNose:"насморк",
-temperature:"температура",
-headache:"головная боль",
-cough:"кашель",
-nausea:"тошнота",
-sneeze:"чихание"
+  runnyNose:"насморк",
+  temperature:"температура",
+  headache:"головная боль",
+  cough:"кашель",
+  nausea:"тошнота",
+  sneeze:"чихание"
 },
 
 uz:{
-runnyNose:"burun oqishi",
-temperature:"harorat",
-headache:"bosh og‘rig‘i",
-cough:"yo‘tal",
-nausea:"ko‘ngil aynishi",
-sneeze:"aksirish"
+  runnyNose:"burun oqishi",
+  temperature:"harorat",
+  headache:"bosh og‘rig‘i",
+  cough:"yo‘tal",
+  nausea:"ko‘ngil aynishi",
+  sneeze:"aksirish"
 },
 
 en:{
-runnyNose:"runny nose",
-temperature:"temperature",
-headache:"headache",
-cough:"cough",
-nausea:"nausea",
-sneeze:"sneezing"
+  runnyNose:"runny nose",
+  temperature:"temperature",
+  headache:"headache",
+  cough:"cough",
+  nausea:"nausea",
+  sneeze:"sneezing"
 }
 
 };
 
 
-/* ===============================
-   MEDIGUIDE 2.0 — SYMPTOM ENGINE
-   =============================== */
+const medicines={
 
-const db = [
-{
- key:"cold",
- name:{ru:"Обычная простуда",uz:"Oddiy shamollash",en:"Common cold"},
- summary:{
-  ru:"Вирусная инфекция верхних дыхательных путей. Обычно вызывает насморк, заложенность носа, чихание, боль в горле и кашель.",
-  uz:"Yuqori nafas yo‘llarining virusli infeksiyasi. Odatda burun oqishi, burun bitishi, aksirish, tomoq og‘rig‘i va yo‘talni keltirib chiqaradi.",
-  en:"A viral upper-respiratory infection that commonly causes a runny or blocked nose, sneezing, sore throat and cough."
- },
- symptoms:["насморк","заложен нос","заложенность носа","чихание","боль в горле","болит горло","кашель","runny nose","blocked nose","nasal congestion","sneezing","sore throat","cough","burun oqishi","burun bitishi","aksirish","tomoq og‘rig‘i","yo‘tal"],
- weights:{"насморк":3,"заложен нос":3,"заложенность носа":3,"чихание":2,"боль в горле":2,"болит горло":2,"кашель":2,"runny nose":3,"blocked nose":3,"nasal congestion":3,"sneezing":2,"sore throat":2,"cough":2,"burun oqishi":3,"burun bitishi":3,"aksirish":2,"tomoq og‘rig‘i":2,"yo‘tal":2},
- matchedLabels:{ru:["насморк","заложенность носа","чихание","боль в горле","кашель"],uz:["burun oqishi","burun bitishi","aksirish","tomoq og‘rig‘i","yo‘tal"],en:["runny nose","nasal congestion","sneezing","sore throat","cough"]},
- meds:["paracetamol","ibuprofen"]
+paracetamol:{
+  names:{
+    ru:"Парацетамол",
+    uz:"Paratsetamol",
+    en:"Paracetamol"
+  },
+
+  icon:"💊",
+
+  desc:{
+    ru:"Средство для уменьшения боли и снижения температуры.",
+    uz:"Og‘riqni kamaytirish va haroratni tushirish uchun qo‘llanadigan dori.",
+    en:"A medicine used to reduce pain and fever."
+  },
+
+  safety:{
+    ru:"Учитывайте противопоказания и индивидуальные особенности.",
+    uz:"Qarshi ko‘rsatmalar va individual xususiyatlarni hisobga oling.",
+    en:"Consider contraindications and individual factors."
+  },
+
+  important:{
+    ru:"Не превышайте дозу, указанную в официальной инструкции.",
+    uz:"Rasmiy yo‘riqnomada ko‘rsatilgan dozadan oshirmang.",
+    en:"Do not exceed the dose stated in the official instructions."
+  }
 },
-{
- key:"flu",
- name:{ru:"Грипп",uz:"Gripp",en:"Influenza"},
- summary:{ru:"Вирусная инфекция, которая часто начинается резко и может сопровождаться температурой, ознобом, выраженной слабостью, ломотой, головной болью и кашлем.",uz:"Ko‘pincha to‘satdan boshlanadigan virusli infeksiya. Isitma, titroq, kuchli holsizlik, badan og‘rig‘i, bosh og‘rig‘i va yo‘tal bo‘lishi mumkin.",en:"A viral infection that often starts suddenly and may cause fever, chills, marked weakness, body aches, headache and cough."},
- symptoms:["высокая температура","температура","озноб","ломота","слабость","головная боль","кашель","fever","high fever","chills","body aches","weakness","headache","cough","isitma","yuqori harorat","titroq","holsizlik","bosh og‘rig‘i","yo‘tal"],
- weights:{"высокая температура":4,"температура":3,"озноб":3,"ломота":3,"слабость":2,"головная боль":2,"кашель":2,"fever":4,"high fever":4,"chills":3,"body aches":3,"weakness":2,"headache":2,"cough":2,"isitma":4,"yuqori harorat":4,"titroq":3,"holsizlik":2,"bosh og‘rig‘i":2,"yo‘tal":2},
- matchedLabels:{ru:["температура","озноб","ломота","слабость","головная боль","кашель"],uz:["isitma","titroq","holsizlik","bosh og‘rig‘i","yo‘tal"],en:["fever","chills","body aches","weakness","headache","cough"]},
- meds:["paracetamol","ibuprofen"]
+
+ibuprofen:{
+  names:{
+    ru:"Ибупрофен",
+    uz:"Ibuprofen",
+    en:"Ibuprofen"
+  },
+
+  icon:"💊",
+
+  desc:{
+    ru:"Нестероидное противовоспалительное средство, применяемое при боли, воспалении и температуре.",
+    uz:"Og‘riq, yallig‘lanish va haroratda qo‘llanadigan nosteroid yallig‘lanishga qarshi dori.",
+    en:"A non-steroidal anti-inflammatory medicine used for pain, inflammation and fever."
+  },
+
+  safety:{
+    ru:"Имеет противопоказания и может подходить не всем.",
+    uz:"Qarshi ko‘rsatmalari bor va hamma uchun mos kelmasligi mumkin.",
+    en:"It has contraindications and may not be suitable for everyone."
+  },
+
+  important:{
+    ru:"Перед применением ознакомьтесь с официальной инструкцией.",
+    uz:"Qo‘llashdan oldin rasmiy yo‘riqnomani o‘qing.",
+    en:"Read the official instructions before use."
+  }
 },
-{
- key:"allergy",
- name:{ru:"Аллергический ринит",uz:"Allergik rinit",en:"Allergic rhinitis"},
- summary:{ru:"Аллергическая реакция, часто вызывающая приступы чихания, зуд в носу или глазах, слезотечение и водянистый насморк.",uz:"Ko‘pincha aksirish, burun yoki ko‘z qichishishi, ko‘z yoshlanishi va suvli burun oqishini keltirib chiqaradigan allergik holat.",en:"An allergic condition that commonly causes repeated sneezing, itchy nose or eyes, watery eyes and a runny nose."},
- symptoms:["чихание","зуд","зуд в носу","зудят глаза","зуд в глазах","слезятся глаза","слезотечение","насморк","sneezing","itch","itchy nose","itchy eyes","watery eyes","runny nose","aksirish","qichishish","burun qichishishi","ko‘z qichishishi","ko‘z yoshlanishi","burun oqishi"],
- weights:{"чихание":3,"зуд":3,"зуд в носу":3,"зудят глаза":4,"зуд в глазах":4,"слезятся глаза":3,"слезотечение":3,"насморк":2,"sneezing":3,"itch":3,"itchy nose":3,"itchy eyes":4,"watery eyes":3,"runny nose":2,"aksirish":3,"qichishish":3,"burun qichishishi":3,"ko‘z qichishishi":4,"ko‘z yoshlanishi":3,"burun oqishi":2},
- matchedLabels:{ru:["чихание","зуд","зуд в глазах","слезотечение","насморк"],uz:["aksirish","qichishish","ko‘z qichishishi","ko‘z yoshlanishi","burun oqishi"],en:["sneezing","itch","itchy eyes","watery eyes","runny nose"]},
- meds:["cetirizine","loratadine"]
+
+cetirizine:{
+  names:{
+    ru:"Цетиризин",
+    uz:"Setirizin",
+    en:"Cetirizine"
+  },
+
+  icon:"🌿",
+
+  desc:{
+    ru:"Антигистаминное средство для облегчения некоторых симптомов аллергии.",
+    uz:"Ba’zi allergiya alomatlarini yengillashtirish uchun qo‘llanadigan antigistamin dori.",
+    en:"An antihistamine used to relieve some allergy symptoms."
+  },
+
+  safety:{
+    ru:"У некоторых людей может вызывать сонливость.",
+    uz:"Ba’zi odamlarda uyquchanlik chaqirishi mumkin.",
+    en:"May cause drowsiness in some people."
+  },
+
+  important:{
+    ru:"Следуйте официальной инструкции и учитывайте противопоказания.",
+    uz:"Rasmiy yo‘riqnomaga amal qiling va qarshi ko‘rsatmalarni hisobga oling.",
+    en:"Follow official instructions and consider contraindications."
+  }
 },
-{
- key:"migraine",
- name:{ru:"Мигрень",uz:"Migren",en:"Migraine"},
- summary:{ru:"Тип головной боли, который у некоторых людей сопровождается пульсирующей болью, тошнотой и повышенной чувствительностью к свету или звукам.",uz:"Ba’zi odamlarda pulsatsiyalanuvchi bosh og‘rig‘i, ko‘ngil aynishi va yorug‘lik yoki tovushga sezgirlik bilan kechadigan bosh og‘rig‘i turi.",en:"A type of headache that may involve throbbing pain, nausea and increased sensitivity to light or sound."},
- symptoms:["головная боль","пульсирующая боль","пульсирует голова","тошнота","свет раздражает","светобоязнь","шум раздражает","headache","throbbing headache","nausea","light sensitivity","sensitivity to light","sound sensitivity","bosh og‘rig‘i","pulsatsiyalanuvchi og‘riq","ko‘ngil aynishi","yorug‘likka sezgirlik"],
- weights:{"головная боль":3,"пульсирующая боль":4,"пульсирует голова":4,"тошнота":2,"свет раздражает":3,"светобоязнь":3,"шум раздражает":3,"headache":3,"throbbing headache":4,"nausea":2,"light sensitivity":3,"sensitivity to light":3,"sound sensitivity":3,"bosh og‘rig‘i":3,"pulsatsiyalanuvchi og‘riq":4,"ko‘ngil aynishi":2,"yorug‘likka sezgirlik":3},
- matchedLabels:{ru:["головная боль","пульсирующая боль","тошнота","чувствительность к свету"],uz:["bosh og‘rig‘i","pulsatsiyalanuvchi og‘riq","ko‘ngil aynishi","yorug‘likka sezgirlik"],en:["headache","throbbing headache","nausea","light sensitivity"]},
- meds:["paracetamol","ibuprofen"]
-},
-{
- key:"pharyngitis",
- name:{ru:"Фарингит / воспаление горла",uz:"Faringit / tomoq yallig‘lanishi",en:"Pharyngitis / sore throat"},
- summary:{ru:"Воспаление глотки, при котором часто возникают боль или раздражение в горле, особенно при глотании.",uz:"Halqum yallig‘lanishi bo‘lib, ko‘pincha tomoq og‘rig‘i yoki yutishda noqulaylikni keltirib chiqaradi.",en:"Inflammation of the throat that commonly causes soreness or irritation, especially when swallowing."},
- symptoms:["боль в горле","болит горло","больно глотать","першит горло","раздражение горла","sore throat","throat pain","pain when swallowing","scratchy throat","tomoq og‘rig‘i","yutish og‘riqli","tomoq qichishi"],
- weights:{"боль в горле":4,"болит горло":4,"больно глотать":4,"першит горло":3,"раздражение горла":3,"sore throat":4,"throat pain":4,"pain when swallowing":4,"scratchy throat":3,"tomoq og‘rig‘i":4,"yutish og‘riqli":4,"tomoq qichishi":3},
- matchedLabels:{ru:["боль в горле","больно глотать","першение"],uz:["tomoq og‘rig‘i","yutish og‘riqli","tomoq qichishi"],en:["sore throat","pain when swallowing","scratchy throat"]},
- meds:["paracetamol","ibuprofen"]
-},
-{
- key:"sinusitis",
- name:{ru:"Синусит",uz:"Sinusit",en:"Sinusitis"},
- summary:{ru:"Воспаление околоносовых пазух, которое может сопровождаться заложенностью носа, выделениями из носа, болью или давлением в области лица.",uz:"Burun yon bo‘shliqlarining yallig‘lanishi. Burun bitishi, burun ajralmasi va yuz sohasida og‘riq yoki bosim bo‘lishi mumkin.",en:"Inflammation of the sinuses that may cause nasal congestion, discharge and facial pain or pressure."},
- symptoms:["заложенность носа","заложен нос","боль в лице","давление в лице","боль в области пазух","густые выделения из носа","nasal congestion","blocked nose","facial pain","facial pressure","sinus pressure","thick nasal discharge","burun bitishi","yuz og‘rig‘i","yuzda bosim","qalin burun ajralmasi"],
- weights:{"заложенность носа":3,"заложен нос":3,"боль в лице":4,"давление в лице":4,"боль в области пазух":4,"густые выделения из носа":3,"nasal congestion":3,"blocked nose":3,"facial pain":4,"facial pressure":4,"sinus pressure":4,"thick nasal discharge":3,"burun bitishi":3,"yuz og‘rig‘i":4,"yuzda bosim":4,"qalin burun ajralmasi":3},
- matchedLabels:{ru:["заложенность носа","боль/давление в лице","выделения из носа"],uz:["burun bitishi","yuz og‘rig‘i","yuzda bosim"],en:["nasal congestion","facial pain/pressure","nasal discharge"]},
- meds:["paracetamol","ibuprofen"]
-},
-{
- key:"gastroenteritis",
- name:{ru:"Гастроэнтерит",uz:"Gastroenterit",en:"Gastroenteritis"},
- summary:{ru:"Воспаление желудка и кишечника, часто связанное с инфекцией. Может вызывать тошноту, рвоту, диарею и боль или спазмы в животе.",uz:"Oshqozon va ichaklarning yallig‘lanishi. Ko‘ngil aynishi, qusish, ich ketishi va qorin og‘rig‘i yoki spazmlari bo‘lishi mumkin.",en:"Inflammation of the stomach and intestines that may cause nausea, vomiting, diarrhea and abdominal pain or cramps."},
- symptoms:["тошнота","рвота","диарея","понос","боль в животе","спазмы в животе","nausea","vomiting","diarrhea","diarrhoea","stomach ache","abdominal pain","abdominal cramps","ko‘ngil aynishi","qusish","ich ketishi","qorin og‘rig‘i","qorin spazmlari"],
- weights:{"тошнота":3,"рвота":4,"диарея":4,"понос":4,"боль в животе":3,"спазмы в животе":3,"nausea":3,"vomiting":4,"diarrhea":4,"diarrhoea":4,"stomach ache":3,"abdominal pain":3,"abdominal cramps":3,"ko‘ngil aynishi":3,"qusish":4,"ich ketishi":4,"qorin og‘rig‘i":3,"qorin spazmlari":3},
- matchedLabels:{ru:["тошнота","рвота","диарея","боль в животе"],uz:["ko‘ngil aynishi","qusish","ich ketishi","qorin og‘rig‘i"],en:["nausea","vomiting","diarrhea","abdominal pain"]},
- meds:[]
-},
-{
- key:"bronchitis",
- name:{ru:"Бронхит",uz:"Bronxit",en:"Bronchitis"},
- summary:{ru:"Воспаление бронхов, которое часто сопровождается кашлем. Кашель может быть сухим или с выделением мокроты.",uz:"Bronxlarning yallig‘lanishi bo‘lib, ko‘pincha yo‘tal bilan kechadi. Yo‘tal quruq yoki balg‘amli bo‘lishi mumkin.",en:"Inflammation of the bronchial tubes that commonly causes cough, which may be dry or produce mucus."},
- symptoms:["кашель","мокрота","сухой кашель","влажный кашель","кашель с мокротой","cough","mucus","phlegm","dry cough","productive cough","yo‘tal","balg‘am","quruq yo‘tal","balg‘amli yo‘tal"],
- weights:{"кашель":3,"мокрота":4,"сухой кашель":4,"влажный кашель":4,"кашель с мокротой":4,"cough":3,"mucus":4,"phlegm":4,"dry cough":4,"productive cough":4,"yo‘tal":3,"balg‘am":4,"quruq yo‘tal":4,"balg‘amli yo‘tal":4},
- matchedLabels:{ru:["кашель","мокрота","сухой/влажный кашель"],uz:["yo‘tal","balg‘am","quruq/balg‘amli yo‘tal"],en:["cough","mucus/phlegm","dry/productive cough"]},
- meds:["paracetamol","ibuprofen"]
+
+loratadine:{
+  names:{
+    ru:"Лоратадин",
+    uz:"Loratadin",
+    en:"Loratadine"
+  },
+
+  icon:"🌿",
+
+  desc:{
+    ru:"Антигистаминное средство для облегчения некоторых аллергических симптомов.",
+    uz:"Ba’zi allergiya simptomlarini yengillashtirish uchun qo‘llanadigan antigistamin dori.",
+    en:"An antihistamine used to relieve some allergy symptoms."
+  },
+
+  safety:{
+    ru:"Учитывайте противопоказания и возможные побочные эффекты.",
+    uz:"Qarshi ko‘rsatmalar va mumkin bo‘lgan nojo‘ya ta’sirlarni hisobga oling.",
+    en:"Consider contraindications and possible side effects."
+  },
+
+  important:{
+    ru:"Используйте препарат согласно официальной инструкции.",
+    uz:"Preparatni rasmiy yo‘riqnomaga muvofiq qo‘llang.",
+    en:"Use the medicine according to the official instructions."
+  }
+
 }
+
+};
+
+
+const db=[
+
+{
+  key:"cold",
+
+  n:{
+    ru:"Обычная простуда",
+    uz:"Oddiy shamollash",
+    en:"Common cold"
+  },
+
+  d:{
+    ru:"Насморк, чихание, боль в горле и кашель могут встречаться при простуде и других инфекциях верхних дыхательных путей.",
+    uz:"Burun oqishi, aksirish, tomoq og‘rig‘i va yo‘tal shamollash hamda yuqori nafas yo‘llari infeksiyalarida uchrashi mumkin.",
+    en:"Runny nose, sneezing, sore throat and cough can occur with colds and other upper respiratory infections."
+  },
+
+  p:[
+    "насморк",
+    "заложен нос",
+    "боль в горле",
+    "болит горло",
+    "кашель",
+    "чихание",
+    "runny nose",
+    "blocked nose",
+    "sore throat",
+    "cough",
+    "sneezing",
+    "burun oqishi",
+    "burun bitishi",
+    "tomoq og‘rig‘i",
+    "yo‘tal",
+    "aksirish"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+},
+
+{
+
+  key:"flu",
+
+  n:{
+    ru:"Гриппоподобное состояние",
+    uz:"Grippga o‘xshash holat",
+    en:"Flu-like illness"
+  },
+
+  d:{
+    ru:"Температура, озноб, ломота, слабость, головная боль и кашель могут встречаться при гриппе и других инфекциях.",
+    uz:"Harorat, titroq, badan og‘rig‘i, holsizlik, bosh og‘rig‘i va yo‘tal gripp hamda boshqa infeksiyalarda uchrashi mumkin.",
+    en:"Fever, chills, body aches, weakness, headache and cough can occur with flu and other infections."
+  },
+
+  p:[
+    "высокая температура",
+    "температура",
+    "озноб",
+    "ломота",
+    "слабость",
+    "головная боль",
+    "кашель",
+    "fever",
+    "high temperature",
+    "chills",
+    "body aches",
+    "weakness",
+    "headache",
+    "cough",
+    "isitma",
+    "yuqori harorat",
+    "titroq",
+    "badan og‘rig‘i",
+    "holsizlik",
+    "bosh og‘rig‘i",
+    "yo‘tal"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+
+},
+
+{
+
+  key:"allergy",
+
+  n:{
+    ru:"Аллергический ринит",
+    uz:"Allergik rinit",
+    en:"Allergic rhinitis"
+  },
+
+  d:{
+    ru:"Чихание, зуд, слезящиеся глаза и насморк могут встречаться при аллергии, особенно после контакта с триггером.",
+    uz:"Aksirish, qichishish, ko‘z yoshlanishi va burun oqishi allergiyada uchrashi mumkin.",
+    en:"Sneezing, itching, watery eyes and a runny nose can occur with allergies."
+  },
+
+  p:[
+    "чихание",
+    "зуд",
+    "слезятся глаза",
+    "зудят глаза",
+    "насморк",
+    "sneezing",
+    "itch",
+    "itchy eyes",
+    "watery eyes",
+    "runny nose",
+    "aksirish",
+    "qichishish",
+    "ko‘z qichishishi",
+    "ko‘z yoshlanishi",
+    "burun oqishi"
+  ],
+
+  m:[
+    "cetirizine",
+    "loratadine"
+  ]
+
+},
+
+{
+
+  key:"migraine",
+
+  n:{
+    ru:"Мигренеподобная головная боль",
+    uz:"Migren tipidagi bosh og‘rig‘i",
+    en:"Migraine-like headache"
+  },
+
+  d:{
+    ru:"Пульсирующая головная боль, тошнота и чувствительность к свету могут встречаться при мигрени. Причин головной боли бывает много.",
+    uz:"Tomirlab og‘rish, ko‘ngil aynishi va yorug‘likka sezuvchanlik migren bilan bog‘liq bo‘lishi mumkin.",
+    en:"Throbbing headache, nausea and light sensitivity can occur with migraine."
+  },
+
+  p:[
+    "пульсирующая боль",
+    "пульсирует голова",
+    "сильная головная боль",
+    "головная боль",
+    "тошнота",
+    "светобоязнь",
+    "headache",
+    "throbbing headache",
+    "severe headache",
+    "nausea",
+    "light sensitivity",
+    "photophobia",
+    "bosh og‘rig‘i",
+    "ko‘ngil aynishi",
+    "yorug‘likka sezuvchanlik"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+
+},
+
+{
+
+  key:"throat",
+
+  n:{
+    ru:"Раздражение или воспаление горла",
+    uz:"Tomoq yallig‘lanishi yoki tirnashishi",
+    en:"Sore or inflamed throat"
+  },
+
+  d:{
+    ru:"Боль или першение в горле могут появляться при вирусных инфекциях, раздражении и других состояниях.",
+    uz:"Tomoq og‘rig‘i yoki qichishi virusli infeksiya, tirnashish va boshqa holatlarda bo‘lishi mumkin.",
+    en:"A sore or irritated throat can occur with viral infections, irritation and other conditions."
+  },
+
+  p:[
+    "боль в горле",
+    "болит горло",
+    "першит горло",
+    "трудно глотать",
+    "sore throat",
+    "throat pain",
+    "scratchy throat",
+    "pain when swallowing",
+    "tomoq og‘rig‘i",
+    "tomoq qichishi",
+    "yutish qiyin"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+
+},
+
+{
+
+  key:"sinus",
+
+  n:{
+    ru:"Симптомы со стороны пазух носа",
+    uz:"Burun bo‘shliqlari bilan bog‘liq alomatlar",
+    en:"Sinus-related symptoms"
+  },
+
+  d:{
+    ru:"Заложенность носа, давление или боль в лице и густые выделения могут встречаться при разных состояниях пазух и носа.",
+    uz:"Burun bitishi, yuzda bosim yoki og‘riq va quyuq ajralmalar turli holatlarda uchrashi mumkin.",
+    en:"Nasal congestion, facial pressure or pain and thick discharge can occur in different sinus and nasal conditions."
+  },
+
+  p:[
+    "заложен нос",
+    "сильная заложенность",
+    "боль в лице",
+    "давит в лице",
+    "давление в пазухах",
+    "густые выделения",
+    "blocked nose",
+    "nasal congestion",
+    "facial pain",
+    "facial pressure",
+    "sinus pressure",
+    "thick discharge",
+    "burun bitishi",
+    "yuz og‘rig‘i",
+    "yuzda bosim",
+    "quyuq ajralma"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+
+},
+
+{
+
+  key:"gastro",
+
+  n:{
+    ru:"Желудочно-кишечные симптомы",
+    uz:"Oshqozon-ichak alomatlari",
+    en:"Gastrointestinal symptoms"
+  },
+
+  d:{
+    ru:"Тошнота, рвота, жидкий стул и боль в животе могут иметь множество причин, включая инфекции и пищевые факторы.",
+    uz:"Ko‘ngil aynishi, qusish, ich ketishi va qorin og‘rig‘i turli sabablarga ega bo‘lishi mumkin.",
+    en:"Nausea, vomiting, diarrhea and abdominal pain can have many causes."
+  },
+
+  p:[
+    "тошнота",
+    "тошнит",
+    "рвота",
+    "диарея",
+    "жидкий стул",
+    "болит живот",
+    "боль в животе",
+    "nausea",
+    "vomiting",
+    "diarrhea",
+    "loose stool",
+    "stomach ache",
+    "abdominal pain",
+    "ko‘ngil aynishi",
+    "qusish",
+    "ich ketishi",
+    "qorin og‘rig‘i"
+  ],
+
+  m:[]
+
+},
+
+{
+
+  key:"cough",
+
+  n:{
+    ru:"Кашель с симптомами дыхательных путей",
+    uz:"Nafas yo‘llari yo‘tali",
+    en:"Respiratory cough symptoms"
+  },
+
+  d:{
+    ru:"Продолжительный кашель, слизь и дискомфорт в груди могут встречаться при разных заболеваниях дыхательных путей.",
+    uz:"Uzoq davom etuvchi yo‘tal, balg‘am va ko‘krakdagi noqulaylik turli nafas yo‘llari holatlarida uchrashi mumkin.",
+    en:"Persistent cough, mucus and chest discomfort can occur with different respiratory conditions."
+  },
+
+  p:[
+    "долгий кашель",
+    "продолжительный кашель",
+    "кашель с мокротой",
+    "мокрота",
+    "дискомфорт в груди",
+    "persistent cough",
+    "long cough",
+    "cough with mucus",
+    "mucus",
+    "chest discomfort",
+    "uzoq davom etuvchi yo‘tal",
+    "balg‘am",
+    "ko‘krakdagi noqulaylik"
+  ],
+
+  m:[
+    "paracetamol",
+    "ibuprofen"
+  ]
+
+}
+
 ];
 
-/* Red flags: these stop ordinary medicine-oriented output. */
-const redFlags = {
- ru:["трудно дышать","затруднено дыхание","не могу дышать","сильная боль в груди","боль в груди","потерял сознание","потеря сознания","сильное кровотечение","кровь при рвоте","кровь в рвоте","сильная аллергическая реакция","отек лица","отек языка","посинение губ"],
- uz:["nafas olish qiyin","nafas yetishmayapti","ko‘krakda kuchli og‘riq","ko‘krak og‘rig‘i","hushdan ketish","kuchli qon ketish","qusishda qon","kuchli allergik reaksiya","yuz shishi","til shishi","lablar ko‘karishi"],
- en:["difficulty breathing","can't breathe","cannot breathe","severe chest pain","chest pain","loss of consciousness","fainted","severe bleeding","vomiting blood","severe allergic reaction","swelling of the face","swollen tongue","blue lips"]
-};
 
-function normalizeText(value){
- return value
-  .toLowerCase()
-  .replace(/[.,!?;:()\[\]{}]/g," ")
-  .replace(/\s+/g," ")
-  .trim();
+const redFlags=[
+
+"затрудненное дыхание",
+"затруднённое дыхание",
+"не могу дышать",
+"тяжело дышать",
+"difficulty breathing",
+"trouble breathing",
+"can't breathe",
+"nafas olish qiyin",
+
+"сильная боль в груди",
+"давит в груди",
+"chest pain",
+"severe chest pain",
+"ko‘krakda kuchli og‘riq",
+
+"потеря сознания",
+"обморок",
+"loss of consciousness",
+"fainted",
+"hushdan ketish",
+
+"рвота кровью",
+"кровь в рвоте",
+"vomiting blood",
+"blood in vomit",
+"qusishda qon",
+
+"сильное кровотечение",
+"не останавливается кровь",
+"severe bleeding",
+"uncontrolled bleeding",
+"kuchli qon ketishi",
+
+"отек лица",
+"отёк лица",
+"отек языка",
+"отёк языка",
+"facial swelling",
+"tongue swelling",
+"yuz shishi",
+"til shishi",
+
+"синие губы",
+"blue lips",
+"ko‘k lablar",
+
+"резкое ухудшение",
+"rapidly worsening",
+"sudden worsening",
+"holat keskin yomonlashdi"
+
+];
+
+
+let lang =
+localStorage.getItem("mediguideLanguage") || "ru";
+
+
+function t(key){
+  return T[lang][key] || key
 }
 
-function containsPhrase(text, phrase){
- return (" " + text + " ").includes(" " + phrase.toLowerCase() + " ") || text.includes(phrase.toLowerCase());
+
+function norm(value){
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[ё]/g,"е")
+    .replace(/’/g,"'")
+    .replace(/\s+/g," ")
+    .trim()
 }
 
-function detectRedFlags(input){
- const all = [...redFlags.ru,...redFlags.uz,...redFlags.en];
- return all.filter(flag=>containsPhrase(input,flag));
+
+function esc(value){
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;")
 }
 
-function scoreCondition(condition,input){
- let score=0;
- const matched=[];
- const seen=new Set();
- for(const symptom of condition.symptoms){
-  if(containsPhrase(input,symptom)){
-   const weight=condition.weights[symptom] || 1;
-   score += weight;
-   if(!seen.has(symptom)){
-    matched.push(symptom);
-    seen.add(symptom);
-   }
+
+function applyLanguage(){
+
+  document.documentElement.lang = lang;
+
+  document.getElementById("languageSelect").value = lang;
+
+
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach(element=>{
+
+      const key =
+        element.dataset.i18n;
+
+      if(T[lang][key] !== undefined){
+        element.textContent = T[lang][key];
+      }
+
+    });
+
+
+  document
+    .querySelectorAll("[data-i18n-placeholder]")
+    .forEach(element=>{
+
+      element.placeholder =
+        t(element.dataset.i18nPlaceholder);
+
+    });
+
+
+  showAllMedicines();
+  displayHistory();
+
+
+  localStorage.setItem(
+    "mediguideLanguage",
+    lang
+  );
+
+}
+
+
+document
+  .getElementById("languageSelect")
+  .addEventListener(
+    "change",
+    event=>{
+      lang = event.target.value;
+      applyLanguage();
+    }
+  );
+
+
+function addSymptom(key){
+
+  const textarea =
+    document.getElementById("symptoms");
+
+  const word =
+    symptomWords[lang][key];
+
+
+  if(!textarea.value.trim()){
+
+    textarea.value = word;
+
+  }else if(
+    !norm(textarea.value)
+      .includes(norm(word))
+  ){
+
+    textarea.value += ", " + word;
+
   }
- }
- return {score,matched};
+
+
+  textarea.focus();
+
 }
 
-function getLocalizedMatches(condition,matched){
- const labels=condition.matchedLabels[lang] || condition.matchedLabels.ru;
- const found=[];
- labels.forEach(label=>{
-  const parts=label.toLowerCase().split("/");
-  if(parts.some(part=>matched.some(m=>m.toLowerCase().includes(part.trim()) || part.trim().includes(m.toLowerCase())))) found.push(label);
- });
- return found.length ? found : matched.slice(0,5);
+
+function clearSymptoms(){
+
+  document
+    .getElementById("symptoms")
+    .value = "";
+
+  document
+    .getElementById("result")
+    .innerHTML = "";
+
 }
 
-function confidenceLabel(score,rank){
- if(rank===0 && score>=7) return {ru:"Высокое соответствие",uz:"Yuqori moslik",en:"High match"};
- if(score>=4) return {ru:"Умеренное соответствие",uz:"O‘rtacha moslik",en:"Moderate match"};
- return {ru:"Низкое соответствие",uz:"Past moslik",en:"Low match"};
+
+function demoMode(){
+
+  document
+    .getElementById("symptoms")
+    .value =
+      lang === "ru"
+        ? "насморк, чихание, зуд в глазах"
+        : lang === "uz"
+          ? "burun oqishi, aksirish, ko‘z qichishishi"
+          : "runny nose, sneezing, itchy eyes";
+
+  analyzeSymptoms();
+
 }
 
-function conditionExtra(condition){
- const data={
-  cold:{
-   typical:{ru:"Насморк, заложенность носа, чихание, боль в горле и кашель.",uz:"Burun oqishi, burun bitishi, aksirish, tomoq og‘rig‘i va yo‘tal.",en:"Runny or blocked nose, sneezing, sore throat and cough."},
-   care:{ru:"Обычно используют отдых, достаточное питьё и симптоматический уход. Антибиотики не лечат вирусную простуду.",uz:"Odatda dam olish, yetarli suyuqlik va simptomlarni yengillashtirishga qaratilgan parvarish qo‘llanadi. Antibiotiklar virusli shamollashni davolamaydi.",en:"Rest, adequate fluids and symptom-focused care are commonly used. Antibiotics do not treat a viral cold."},
-   doctor:{ru:"Обратитесь за медицинской оценкой при выраженном ухудшении, длительной высокой температуре или необычных симптомах.",uz:"Holat keskin yomonlashsa, yuqori harorat uzoq davom etsa yoki noodatiy alomatlar bo‘lsa, shifokorga murojaat qiling.",en:"Seek medical assessment if symptoms become severe, high fever persists, or unusual symptoms appear."}
-  },
-  flu:{
-   typical:{ru:"Часто возникают температура, озноб, ломота, слабость, головная боль и кашель.",uz:"Ko‘pincha isitma, titroq, badan og‘rig‘i, holsizlik, bosh og‘rig‘i va yo‘tal kuzatiladi.",en:"Common features include fever, chills, body aches, weakness, headache and cough."},
-   care:{ru:"Обычно важны отдых, питьё и наблюдение за состоянием. При выраженных симптомах нужна медицинская оценка.",uz:"Odatda dam olish, suyuqlik ichish va holatni kuzatish muhim. Kuchli alomatlarda tibbiy baholash kerak.",en:"Rest, fluids and monitoring are commonly important. Significant symptoms may require medical assessment."},
-   doctor:{ru:"Особенно важно обратиться за помощью при затруднённом дыхании, боли в груди или резком ухудшении.",uz:"Nafas olish qiyinlashsa, ko‘krak og‘risa yoki holat keskin yomonlashsa, yordamga murojaat qiling.",en:"Seek help for difficulty breathing, chest pain or sudden worsening."}
-  },
-  allergy:{
-   typical:{ru:"Чихание, зуд, водянистый насморк, зуд или слезотечение глаз.",uz:"Aksirish, qichishish, suvli burun oqishi, ko‘z qichishishi yoki yoshlanishi.",en:"Sneezing, itching, watery runny nose, itchy or watery eyes."},
-   care:{ru:"Важно по возможности избегать известного аллергена. В справочнике MediGuide есть общая информация об антигистаминных препаратах.",uz:"Imkon bo‘lsa ma’lum allergenlardan saqlanish muhim. MediGuide ma’lumotnomasida antigistamin dorilar haqida umumiy ma’lumot bor.",en:"Avoiding a known trigger when possible can help. MediGuide contains general information about antihistamine medicines."},
-   doctor:{ru:"При отёке языка или лица, выраженной одышке или быстром ухудшении нужна срочная помощь.",uz:"Til yoki yuz shishi, kuchli nafas qisilishi yoki tez yomonlashishda shoshilinch yordam kerak.",en:"Urgent help is needed for tongue or facial swelling, significant breathing difficulty or rapid worsening."}
-  },
-  migraine:{
-   typical:{ru:"Головная боль, иногда пульсирующая, с тошнотой и чувствительностью к свету или звукам.",uz:"Bosh og‘rig‘i, ba’zan pulsatsiyalanuvchi, ko‘ngil aynishi va yorug‘lik yoki tovushga sezgirlik bilan.",en:"Headache, sometimes throbbing, with nausea and sensitivity to light or sound."},
-   care:{ru:"Полезно находиться в спокойной обстановке и следовать назначенному врачом плану, если мигрень уже диагностирована.",uz:"Tinch muhitda bo‘lish va migren avval tashxislangan bo‘lsa, shifokor tavsiya qilgan rejaga amal qilish foydali.",en:"A quiet environment may help; if migraine has already been diagnosed, follow the plan provided by a clinician."},
-   doctor:{ru:"Новая, необычно сильная или внезапная головная боль требует медицинской оценки.",uz:"Yangi, noodatiy kuchli yoki to‘satdan paydo bo‘lgan bosh og‘rig‘i tibbiy baholashni talab qiladi.",en:"A new, unusually severe or sudden headache requires medical assessment."}
-  },
-  pharyngitis:{
-   typical:{ru:"Боль или раздражение в горле, особенно при глотании.",uz:"Tomoq og‘rig‘i yoki tirnashishi, ayniqsa yutishda.",en:"Sore or irritated throat, especially when swallowing."},
-   care:{ru:"Поддерживающие меры могут уменьшать дискомфорт. Причина воспаления может быть разной, поэтому антибиотики нельзя считать универсальным решением.",uz:"Qo‘llab-quvvatlovchi choralar noqulaylikni kamaytirishi mumkin. Sabab turlicha bo‘lishi mumkin, shuning uchun antibiotik universal yechim emas.",en:"Supportive care may reduce discomfort. Causes vary, so antibiotics are not a universal solution."},
-   doctor:{ru:"При затруднённом дыхании или глотании, выраженном ухудшении или сильной боли нужна медицинская оценка.",uz:"Nafas olish yoki yutish qiyinlashsa, holat yomonlashsa yoki og‘riq kuchli bo‘lsa, tibbiy baholash kerak.",en:"Medical assessment is important for difficulty breathing or swallowing, severe pain or worsening symptoms."}
-  },
-  sinusitis:{
-   typical:{ru:"Заложенность носа, выделения из носа и давление или боль в области лица.",uz:"Burun bitishi, burun ajralmasi va yuz sohasida bosim yoki og‘riq.",en:"Nasal congestion, nasal discharge and facial pain or pressure."},
-   care:{ru:"Подход зависит от причины и длительности симптомов. Не стоит автоматически использовать антибиотики.",uz:"Yondashuv sabab va alomatlar davomiyligiga bog‘liq. Antibiotiklarni avtomatik qo‘llash kerak emas.",en:"Management depends on the cause and duration. Antibiotics should not be assumed to be necessary automatically."},
-   doctor:{ru:"При сильной боли, отёке лица, ухудшении зрения или выраженном ухудшении нужна медицинская помощь.",uz:"Kuchli og‘riq, yuz shishi, ko‘rish yomonlashishi yoki keskin yomonlashishda tibbiy yordam kerak.",en:"Seek medical help for severe pain, facial swelling, vision changes or marked worsening."}
-  },
-  gastroenteritis:{
-   typical:{ru:"Тошнота, рвота, диарея и боль или спазмы в животе.",uz:"Ko‘ngil aynishi, qusish, ich ketishi va qorin og‘rig‘i yoki spazmlari.",en:"Nausea, vomiting, diarrhea and abdominal pain or cramps."},
-   care:{ru:"Главная задача — поддерживать достаточное потребление жидкости. При признаках обезвоживания нужна медицинская оценка.",uz:"Asosiy maqsad yetarli suyuqlikni saqlashdir. Suvsizlanish belgilari bo‘lsa, tibbiy baholash kerak.",en:"Maintaining adequate fluid intake is important. Signs of dehydration require medical assessment."},
-   doctor:{ru:"Кровь в рвоте или стуле, сильная боль, выраженная слабость или признаки обезвоживания требуют помощи.",uz:"Qusishda yoki najasda qon, kuchli og‘riq, kuchli holsizlik yoki suvsizlanish belgilari yordamni talab qiladi.",en:"Blood in vomit or stool, severe pain, marked weakness or signs of dehydration require medical help."}
-  },
-  bronchitis:{
-   typical:{ru:"Кашель, иногда с мокротой; может сохраняться некоторое время после инфекции.",uz:"Yo‘tal, ba’zan balg‘am bilan; infeksiyadan keyin bir muddat davom etishi mumkin.",en:"Cough, sometimes with mucus; it can persist for some time after an infection."},
-   care:{ru:"Обычно важны отдых, питьё и наблюдение за симптомами. Причину кашля важно учитывать перед лечением.",uz:"Odatda dam olish, suyuqlik va alomatlarni kuzatish muhim. Davolashdan oldin yo‘tal sababini hisobga olish kerak.",en:"Rest, fluids and monitoring are commonly important. The cause of cough should be considered before treatment."},
-   doctor:{ru:"При одышке, боли в груди, крови в мокроте или выраженном ухудшении нужна медицинская оценка.",uz:"Nafas qisilishi, ko‘krak og‘rig‘i, balg‘amda qon yoki keskin yomonlashishda tibbiy baholash kerak.",en:"Seek medical assessment for shortness of breath, chest pain, blood in mucus or marked worsening."}
-  }
- };
- return data[condition.key];
+
+function score(condition,input){
+
+  const text =
+    norm(input);
+
+  let score = 0;
+
+  const matched = [];
+
+
+  condition.p.forEach(
+    phrase=>{
+
+      if(text.includes(norm(phrase))){
+
+        score++;
+
+        matched.push(phrase);
+
+      }
+
+    }
+  );
+
+
+  return {
+    ...condition,
+    score,
+    matched
+  };
+
 }
 
-function medicineMiniHTML(ids){
- if(!ids.length) return `<div class="result-warning">${t("noAuto")}</div>`;
- return `<div class="analysis-medicines">${ids.map(id=>{
-  const m=medicines[id];
-  return `<button class="analysis-medicine" onclick="openMedicine('${id}')"><span>${m.icon}</span><strong>${m.names[lang]}</strong><small>${lang==='ru'?'Общая информация':lang==='uz'?'Umumiy ma’lumot':'General information'}</small></button>`;
- }).join("")}</div>`;
-}
 
 function analyzeSymptoms(){
- const raw=document.getElementById("symptoms").value.trim();
- const input=normalizeText(raw);
- const result=document.getElementById("result");
 
- if(!input){
-  result.innerHTML=`<div class="result-card"><h3>${t("enterSymptoms")}</h3><p>${t("enterSymptomsDesc")}</p></div>`;
-  return;
- }
+  const input =
+    document
+      .getElementById("symptoms")
+      .value
+      .trim();
 
- result.innerHTML=`<div class="result-card"><h3>⏳ ${t("loading")}</h3><p>${lang==='ru'?'Система сопоставляет несколько признаков, а не только одно ключевое слово.':lang==='uz'?'Tizim bitta kalit so‘z emas, bir nechta belgini solishtirmoqda.':'The system is matching multiple symptoms rather than a single keyword.'}</p></div>`;
+  const result =
+    document.getElementById("result");
 
- setTimeout(()=>{
-  const flags=detectRedFlags(input);
-  const scored=db.map(condition=>{
-   const r=scoreCondition(condition,input);
-   return {...condition,...r};
-  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
 
-  const top=scored.slice(0,3);
+  if(!input){
 
-  if(flags.length){
-   result.innerHTML=`<div class="result-card analysis-danger">
-    <div class="analysis-title-row"><span class="analysis-alert">🚨</span><div><div class="analysis-kicker">${lang==='ru'?'Важное предупреждение':lang==='uz'?'Muhim ogohlantirish':'Important warning'}</div><h3>${lang==='ru'?'Нужна срочная медицинская оценка':lang==='uz'?'Shoshilinch tibbiy baholash kerak':'Urgent medical assessment is needed'}</h3></div></div>
-    <p>${lang==='ru'?'В описании обнаружены симптомы, которые нельзя безопасно оценивать только через автоматический справочник. Не используйте результат MediGuide для выбора лечения.':lang==='uz'?'Ta’rifda avtomatik ma’lumotnoma orqali xavfsiz baholab bo‘lmaydigan belgilar aniqlandi. Davolashni tanlash uchun MediGuide natijasidan foydalanmang.':'Your description contains symptoms that should not be assessed only by an automated information tool. Do not use MediGuide to choose treatment.'}</p>
-    <div class="matched">${flags.slice(0,5).map(x=>`<span>⚠️ ${escapeHTML(x)}</span>`).join("")}</div>
-    <div class="result-warning">${lang==='ru'?'Обратитесь за медицинской помощью. При непосредственной угрозе жизни используйте местную экстренную службу.':lang==='uz'?'Tibbiy yordamga murojaat qiling. Hayot uchun bevosita xavf bo‘lsa, mahalliy tez yordam xizmatidan foydalaning.':'Seek medical care. If there is an immediate life threat, use your local emergency service.'}</div>
-   </div>`;
-   saveHistory(raw,lang==='ru'?"Требуется срочная оценка":lang==='uz'?"Shoshilinch baholash kerak":"Urgent assessment needed");
-   result.scrollIntoView({behavior:"smooth",block:"start"});
-   return;
+    result.innerHTML = `
+
+      <div class="result">
+
+        <div class="rTop">
+
+          <div>
+
+            <div class="eyebrow">
+              MediGuide
+            </div>
+
+            <h3>
+              ${esc(t("enterSymptoms"))}
+            </h3>
+
+            <p>
+              ${esc(t("enterSymptomsDesc"))}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
   }
 
-  if(!top.length){
-   result.innerHTML=`<div class="result-card"><h3>${t("notFound")}</h3><p>${t("notFoundDesc")}</p><div class="result-warning">${t("warning")}</div></div>`;
-   saveHistory(raw,t("historyNo"));
-   return;
-  }
 
-  const cards=top.map((condition,index)=>{
-   const extra=conditionExtra(condition);
-   const confidence=confidenceLabel(condition.score,index);
-   const matched=getLocalizedMatches(condition,condition.matched);
-   const maxScore=Math.max(...condition.symptoms.map(s=>condition.weights[s]||1));
-   const pct=Math.min(96,Math.max(18,Math.round((condition.score/(maxScore*3))*100)));
-   return `<article class="condition-card ${index===0?'condition-best':''}">
-    <div class="condition-header">
-     <div><div class="analysis-kicker">${index===0?(lang==='ru'?'Наиболее соответствующий вариант':lang==='uz'?'Eng mos variant':'Best matching option'):(lang==='ru'?'Также возможно':lang==='uz'?'Shuningdek mumkin':'Also possible')}</div><h3>${condition.name[lang]}</h3></div>
-     <div class="match-score"><strong>${pct}%</strong><small>${confidence[lang]}</small></div>
+  result.innerHTML = `
+
+    <div class="result loading">
+
+      <div class="ring"></div>
+
+      <b>
+        ${esc(t("loading"))}
+      </b>
+
     </div>
-    <div class="score-bar"><span style="width:${pct}%"></span></div>
-    <p>${condition.summary[lang]}</p>
-    <div class="analysis-section"><h4>🧩 ${lang==='ru'?'Почему система показала этот вариант':lang==='uz'?'Nega tizim bu variantni ko‘rsatdi':'Why this option appeared'}</h4><div class="matched">${matched.map(x=>`<span>✓ ${escapeHTML(x)}</span>`).join("")}</div></div>
-    <div class="analysis-grid">
-     <div><h4>📋 ${lang==='ru'?'Типичные признаки':lang==='uz'?'Odatdagi belgilar':'Typical features'}</h4><p>${extra.typical[lang]}</p></div>
-     <div><h4>ℹ️ ${lang==='ru'?'Что обычно делают':lang==='uz'?'Odatda nima qilinadi':'What is usually done'}</h4><p>${extra.care[lang]}</p></div>
-    </div>
-    <div class="analysis-section"><h4>💊 ${lang==='ru'?'Лекарства в справочнике':lang==='uz'?'Ma’lumotnomadagi dorilar':'Medicines in the guide'}</h4>${medicineMiniHTML(condition.meds)}</div>
-    <div class="analysis-section doctor-note"><h4>🩺 ${lang==='ru'?'Когда нужна медицинская оценка':lang==='uz'?'Qachon shifokorga murojaat qilish kerak':'When medical assessment is needed'}</h4><p>${extra.doctor[lang]}</p></div>
-   </article>`;
-  }).join("");
 
-  result.innerHTML=`<div class="result-card analysis-result">
-   <div class="analysis-title-row"><span class="analysis-icon">🔎</span><div><div class="analysis-kicker">${lang==='ru'?'Результат анализа':lang==='uz'?'Tahlil natijasi':'Analysis result'}</div><h3>${lang==='ru'?'Найдено несколько возможных вариантов':lang==='uz'?'Bir nechta mumkin bo‘lgan variant topildi':'Several possible matches found'}</h3></div></div>
-   <p>${lang==='ru'?'MediGuide сравнил несколько симптомов и показывает информационные варианты. Это не диагноз.':lang==='uz'?'MediGuide bir nechta alomatni solishtirdi va ma’lumot uchun variantlarni ko‘rsatmoqda. Bu tashxis emas.':'MediGuide compared multiple symptoms and shows informational possibilities. This is not a diagnosis.'}</p>
-   <div class="analysis-list">${cards}</div>
-   <div class="result-warning">${t("resultOnly")}</div>
-  </div>`;
-
-  saveHistory(raw,top[0].name[lang]);
-  result.scrollIntoView({behavior:"smooth",block:"start"});
- },650);
-}
+  `;
 
 
-function searchMedicine(){
+  setTimeout(()=>{
 
-const input =
-document
-.getElementById("medicineInput")
-.value
-.trim()
-.toLowerCase();
+    const text =
+      norm(input);
 
 
-const container =
-document.getElementById("medicineResult");
+    const urgent =
+      redFlags.filter(
+        phrase =>
+          text.includes(norm(phrase))
+      );
 
 
-const filtered =
-Object
-.entries(medicines)
-.filter(([id,medicine])=>{
+    if(urgent.length){
 
-if(!input){
+      result.innerHTML = `
 
-return true;
+        <div class="result">
 
-}
+          <div class="rTop">
 
+            <div>
 
-return (
+              <div class="eyebrow">
+                MediGuide • Safety
+              </div>
 
-medicine.names[lang]
-.toLowerCase()
-.includes(input)
+              <h3>
+                ${
+                  lang === "ru"
+                    ? "Нужна срочная медицинская оценка"
+                    : lang === "uz"
+                      ? "Shoshilinch tibbiy baholash kerak"
+                      : "Urgent medical assessment needed"
+                }
+              </h3>
 
-||
+              <p>
+                ${esc(t("emergencyText"))}
+              </p>
 
-Object
-.values(medicine.names)
-.some(name=>
-name
-.toLowerCase()
-.includes(input)
-)
+            </div>
 
-);
+            <div class="chip">
+              🚨 ${urgent.length}
+            </div>
 
-});
-
-
-if(!filtered.length){
-
-container.innerHTML = `
-
-<div class="empty-history">
-
-${t("medicineNotFound")}
-
-</div>
-
-`;
-
-return;
-
-}
+          </div>
 
 
-container.innerHTML =
-filtered
-.map(([id])=>medicineCard(id))
-.join("");
+          <div class="urgentBox">
 
-}
+            <strong>
 
+              ${
+                lang === "ru"
+                  ? "Обнаружены тревожные признаки:"
+                  : lang === "uz"
+                    ? "Xavf belgilar aniqlandi:"
+                    : "Red-flag symptoms detected:"
+              }
 
-function showAllMedicines(){
-
-const container =
-document.getElementById("medicineResult");
-
-
-if(!container){
-
-return;
-
-}
+            </strong>
 
 
-container.innerHTML =
-Object
-.keys(medicines)
-.map(medicineCard)
-.join("");
+            ${
+              urgent
+                .slice(0,6)
+                .map(
+                  phrase =>
+                    `<div>• ${esc(phrase)}</div>`
+                )
+                .join("")
+            }
+
+
+            <div style="margin-top:9px">
+
+              ${
+                lang === "ru"
+                  ? "Не полагайтесь на автоматический анализ и обратитесь за срочной медицинской помощью."
+                  : lang === "uz"
+                    ? "Avtomatik tahlilga tayanmang va shoshilinch tibbiy yordamga murojaat qiling."
+                    : "Do not rely on automated analysis; seek urgent medical help."
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      saveHistory(
+        input,
+        lang === "ru"
+          ? "Нужна срочная помощь"
+          : lang === "uz"
+            ? "Shoshilinch yordam kerak"
+            : "Urgent help needed"
+      );
+
+
+      result.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+
+      return;
+
+    }
+
+
+    const hits =
+      db
+        .map(
+          condition =>
+            score(condition,input)
+        )
+        .filter(
+          condition =>
+            condition.score
+        )
+        .sort(
+          (a,b) =>
+            b.score - a.score
+        );
+
+
+    if(!hits.length){
+
+      result.innerHTML = `
+
+        <div class="result">
+
+          <div class="rTop">
+
+            <div>
+
+              <div class="eyebrow">
+                MediGuide
+              </div>
+
+              <h3>
+                ${esc(t("notFound"))}
+              </h3>
+
+              <p>
+                ${esc(t("notFoundDesc"))}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="warning">
+            ${esc(t("warning"))}
+          </div>
+
+        </div>
+
+      `;
+
+
+      saveHistory(
+        input,
+        t("historyNo")
+      );
+
+
+      return;
+
+    }
+
+
+    const max =
+      hits[0].score;
+
+
+    const top =
+      hits.slice(0,3);
+
+
+    const intro =
+      lang === "ru"
+        ? "Возможные информационные совпадения"
+        : lang === "uz"
+          ? "Mumkin bo‘lgan ma’lumot mosliklari"
+          : "Possible information matches";
+
+
+    result.innerHTML = `
+
+      <div class="result">
+
+        <div class="rTop">
+
+          <div>
+
+            <div class="eyebrow">
+              MediGuide • Educational analysis
+            </div>
+
+            <h3>
+              ${intro}
+            </h3>
+
+            <p>
+              ${esc(t("resultOnly"))}
+            </p>
+
+          </div>
+
+
+          <div class="chip">
+            ${top.length}
+          </div>
+
+        </div>
+
+
+        <div class="cards">
+
+          ${
+            top
+              .map(
+                (condition,index)=>{
+
+                  const percent =
+                    Math.max(
+                      20,
+                      Math.round(
+                        condition.score /
+                        max *
+                        100
+                      )
+                    );
+
+
+                  return `
+
+                    <article
+                      class="cond ${
+                        index
+                          ? ""
+                          : "best"
+                      }"
+                    >
+
+                      <div class="condHead">
+
+                        <h4>
+                          ${esc(
+                            condition.n[lang]
+                          )}
+                        </h4>
+
+                        <div class="score">
+                          ${percent}%
+                        </div>
+
+                      </div>
+
+
+                      <div class="track">
+
+                        <div
+                          class="fill"
+                          style="width:${percent}%"
+                        ></div>
+
+                      </div>
+
+
+                      <p>
+                        ${esc(
+                          condition.d[lang]
+                        )}
+                      </p>
+
+
+                      <div class="tags">
+
+                        ${
+                          condition.matched
+                            .slice(0,8)
+                            .map(
+                              symptom =>
+                                `<span class="tag">${esc(symptom)}</span>`
+                            )
+                            .join("")
+                        }
+
+                      </div>
+
+
+                      <div class="box">
+
+                        <strong>
+
+                          ${
+                            lang === "ru"
+                              ? "Что обычно учитывают"
+                              : lang === "uz"
+                                ? "Odatda nimalarga e’tibor beriladi"
+                                : "General care"
+                          }
+
+                        </strong>
+
+
+                        ${
+                          lang === "ru"
+                            ? "Отдых, наблюдение за состоянием и достаточное питьё могут быть общими поддерживающими мерами."
+                            : lang === "uz"
+                              ? "Dam olish, holatni kuzatish va yetarli suyuqlik umumiy yordamchi choralar bo‘lishi mumkin."
+                              : "Rest, monitoring, and adequate fluids may be general supportive measures."
+                        }
+
+                      </div>
+
+
+                      <div class="box">
+
+                        <strong>
+
+                          ⚕️
+
+                          ${
+                            lang === "ru"
+                              ? " Когда обратиться к врачу"
+                              : lang === "uz"
+                                ? " Qachon shifokorga murojaat qilish"
+                                : " When to seek care"
+                          }
+
+                        </strong>
+
+
+                        ${
+                          lang === "ru"
+                            ? "При ухудшении состояния, новых тревожных симптомах или сохраняющихся выраженных симптомах нужна медицинская оценка."
+                            : lang === "uz"
+                              ? "Holat yomonlashsa, xavf belgilar paydo bo‘lsa yoki kuchli alomatlar saqlansa, tibbiy baholash kerak."
+                              : "Seek medical assessment for worsening, new red flags, or persistent significant symptoms."
+                        }
+
+                      </div>
+
+
+                      <div class="box">
+
+                        <strong>
+                          💊
+                          ${
+                            lang === "ru"
+                              ? " Справочник лекарств"
+                              : lang === "uz"
+                                ? " Dorilar ma’lumotnomasi"
+                                : " Medicine guide"
+                          }
+                        </strong>
+
+
+                        ${
+                          condition.m.length
+
+                            ? `
+
+                              <div class="mini">
+
+                                ${
+                                  condition.m
+                                    .map(
+                                      id=>{
+
+                                        const medicine =
+                                          medicines[id];
+
+                                        return `
+
+                                          <div class="miniCard">
+
+                                            <div class="miniIcon">
+                                              ${medicine.icon}
+                                            </div>
+
+                                            <div>
+
+                                              <strong>
+                                                ${esc(
+                                                  medicine.names[lang]
+                                                )}
+                                              </strong>
+
+                                              <small>
+                                                ${esc(
+                                                  t("infoLink")
+                                                )}
+                                              </small>
+
+                                            </div>
+
+                                          </div>
+
+                                        `;
+
+                                      }
+                                    )
+                                    .join("")
+                                }
+
+                              </div>
+
+                            `
+
+                            :
+
+                            `<div>
+                              ${esc(
+                                t("noAuto")
+                              )}
+                            </div>`
+                        }
+
+                      </div>
+
+                    </article>
+
+                  `;
+
+                }
+              )
+              .join("")
+          }
+
+        </div>
+
+
+        <div class="warning">
+          ${esc(t("resultOnly"))}
+        </div>
+
+      </div>
+
+    `;
+
+
+    saveHistory(
+      input,
+      top[0].n[lang]
+    );
+
+
+    result.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  },600);
 
 }
 
 
 function medicineCard(id){
 
-const medicine =
-medicines[id];
+  const medicine =
+    medicines[id];
 
 
-return `
+  return `
 
-<div class="medicine-card">
+    <div class="medicine">
 
-<div class="medicine-top">
+      <div class="medicineTop">
 
-<div class="medicine-icon">
+        <div class="medIcon">
+          ${medicine.icon}
+        </div>
 
-${medicine.icon}
+        <h3>
+          ${esc(
+            medicine.names[lang]
+          )}
+        </h3>
 
-</div>
-
-<h3>
-${medicine.names[lang]}
-</h3>
-
-</div>
-
-
-<p>
-${medicine.desc[lang]}
-</p>
+      </div>
 
 
-<div class="medicine-info">
-
-<strong>
-${t("safety")}
-</strong>
-
-${medicine.safety[lang]}
-
-</div>
+      <p>
+        ${esc(
+          medicine.desc[lang]
+        )}
+      </p>
 
 
-<div class="medicine-info">
+      <div class="medicineInfo">
 
-<strong>
-${t("important")}
-</strong>
+        <strong>
+          ${esc(t("safety"))}
+        </strong>
 
-${medicine.important[lang]}
+        ${esc(
+          medicine.safety[lang]
+        )}
 
-</div>
+      </div>
 
 
-<button
-class="medicine-open"
-onclick="openMedicine('${id}')">
+      <div class="medicineInfo">
 
-${t("more")}
+        <strong>
+          ${esc(t("important"))}
+        </strong>
 
-</button>
+        ${esc(
+          medicine.important[lang]
+        )}
 
-</div>
+      </div>
 
-`;
+
+      <button
+        class="more"
+        onclick="openMedicine('${id}')"
+      >
+        ${esc(t("more"))}
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+function showAllMedicines(){
+
+  const container =
+    document.getElementById(
+      "medicineResult"
+    );
+
+
+  if(container){
+
+    container.innerHTML =
+      Object
+        .keys(medicines)
+        .map(medicineCard)
+        .join("");
+
+  }
+
+}
+
+
+function searchMedicine(){
+
+  const query =
+    norm(
+      document
+        .getElementById("medicineInput")
+        .value
+    );
+
+
+  const container =
+    document.getElementById(
+      "medicineResult"
+    );
+
+
+  const filtered =
+    Object
+      .entries(medicines)
+      .filter(
+        ([id,medicine]) =>
+
+          !query ||
+
+          Object
+            .values(
+              medicine.names
+            )
+            .some(
+              name =>
+                norm(name)
+                  .includes(query)
+            )
+      );
+
+
+  container.innerHTML =
+    filtered.length
+
+      ?
+
+      filtered
+        .map(
+          ([id]) =>
+            medicineCard(id)
+        )
+        .join("")
+
+      :
+
+      `
+        <div class="empty">
+          ${esc(
+            t("medicineNotFound")
+          )}
+        </div>
+      `;
 
 }
 
 
 function openMedicine(id){
 
-const medicine =
-medicines[id];
+  const medicine =
+    medicines[id];
 
 
-document
-.getElementById("modalContent")
-.innerHTML = `
+  document
+    .getElementById(
+      "modalContent"
+    )
+    .innerHTML = `
 
-<h2>
-
-${medicine.icon}
-
-${medicine.names[lang]}
-
-</h2>
-
-
-<p>
-${medicine.desc[lang]}
-</p>
+      <h2>
+        ${medicine.icon}
+        ${esc(
+          medicine.names[lang]
+        )}
+      </h2>
 
 
-<div class="medicine-info">
-
-<strong>
-${t("safety")}
-</strong>
-
-${medicine.safety[lang]}
-
-</div>
+      <p>
+        ${esc(
+          medicine.desc[lang]
+        )}
+      </p>
 
 
-<div class="medicine-info">
+      <div class="medicineInfo">
 
-<strong>
-${t("important")}
-</strong>
+        <strong>
+          ${esc(t("safety"))}
+        </strong>
 
-${medicine.important[lang]}
+        ${esc(
+          medicine.safety[lang]
+        )}
 
-</div>
-
-
-<div class="result-warning">
-
-${t("modalWarning")}
-
-</div>
-
-`;
+      </div>
 
 
-document
-.getElementById("medicineModal")
-.classList.add("active");
+      <div class="medicineInfo">
+
+        <strong>
+          ${esc(t("important"))}
+        </strong>
+
+        ${esc(
+          medicine.important[lang]
+        )}
+
+      </div>
+
+
+      <div class="warning">
+        ${esc(
+          t("modalWarning")
+        )}
+      </div>
+
+    `;
+
+
+  document
+    .getElementById(
+      "medicineModal"
+    )
+    .classList
+    .add("active");
 
 }
 
 
 function closeModal(){
 
-document
-.getElementById("medicineModal")
-.classList
-.remove("active");
+  document
+    .getElementById(
+      "medicineModal"
+    )
+    .classList
+    .remove("active");
 
 }
-
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(event.key === "Escape"){
-
-closeModal();
-
-}
-
-}
-);
 
 
 function saveHistory(
-symptoms,
-category
+  symptoms,
+  category
 ){
 
-let history =
-JSON.parse(
-localStorage.getItem(
-"mediguideHistory"
-) || "[]"
-);
+  let history =
+    JSON.parse(
+      localStorage.getItem(
+        "mediguideHistory"
+      ) || "[]"
+    );
 
 
-history.unshift({
+  history.unshift({
 
-symptoms:symptoms,
+    symptoms,
+    category,
 
-category:category,
+    date:
+      new Date()
+        .toLocaleString(
+          lang === "ru"
+            ? "ru-RU"
+            : lang === "uz"
+              ? "uz-UZ"
+              : "en-US",
+          {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        )
 
-date:new Date()
-.toLocaleString(
-lang === "ru"
-? "ru-RU"
-: lang === "uz"
-? "uz-UZ"
-: "en-US",
-{
-day:"2-digit",
-month:"2-digit",
-year:"numeric",
-hour:"2-digit",
-minute:"2-digit"
-}
-)
-
-});
-
-
-localStorage.setItem(
-"mediguideHistory",
-JSON.stringify(
-history.slice(0,10)
-)
-);
+  });
 
 
-displayHistory();
+  localStorage.setItem(
+
+    "mediguideHistory",
+
+    JSON.stringify(
+      history.slice(0,10)
+    )
+
+  );
+
+
+  displayHistory();
 
 }
 
 
 function displayHistory(){
 
-const container =
-document.getElementById(
-"historyList"
-);
+  const container =
+    document.getElementById(
+      "historyList"
+    );
 
 
-if(!container){
-
-return;
-
-}
-
-
-const history =
-JSON.parse(
-localStorage.getItem(
-"mediguideHistory"
-) || "[]"
-);
+  const history =
+    JSON.parse(
+      localStorage.getItem(
+        "mediguideHistory"
+      ) || "[]"
+    );
 
 
-if(!history.length){
+  if(!history.length){
 
-container.innerHTML = `
+    container.innerHTML = `
 
-<div class="empty-history">
+      <div class="empty">
 
-${t("historyEmpty")}
+        ${esc(
+          t("historyEmpty")
+        )}
 
-</div>
+      </div>
 
-`;
+    `;
 
-return;
+    return;
 
-}
+  }
 
 
-container.innerHTML =
-history
-.map(item=>`
+  container.innerHTML =
 
-<div class="history-item">
+    history
 
-<div>
+      .map(
+        item => `
 
-<strong>
-${escapeHTML(item.category)}
-</strong>
+          <div class="hItem">
 
-<small>
-${escapeHTML(item.symptoms)}
-</small>
+            <div>
 
-</div>
+              <strong>
+                ${esc(
+                  item.category
+                )}
+              </strong>
 
-<small>
-${escapeHTML(item.date)}
-</small>
+              <small>
+                ${esc(
+                  item.symptoms
+                )}
+              </small>
 
-</div>
+            </div>
 
-`)
-.join("");
+
+            <small>
+              ${esc(
+                item.date
+              )}
+            </small>
+
+          </div>
+
+        `
+      )
+      .join("");
 
 }
 
 
 function clearHistory(){
 
-localStorage.removeItem(
-"mediguideHistory"
-);
+  localStorage.removeItem(
+    "mediguideHistory"
+  );
 
-displayHistory();
-
-}
-
-
-function escapeHTML(value){
-
-return String(value)
-
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
+  displayHistory();
 
 }
 
 
 function toggleFAQ(button){
 
-button
-.parentElement
-.classList
-.toggle("active");
+  button
+    .parentElement
+    .classList
+    .toggle("active");
 
 }
 
 
 function toggleTheme(){
 
-document
-.body
-.classList
-.toggle("dark");
+  document
+    .body
+    .classList
+    .toggle("dark");
 
 
-localStorage.setItem(
-"mediguideTheme",
-document.body.classList.contains("dark")
-? "dark"
-: "light"
-);
+  localStorage.setItem(
+
+    "mediguideTheme",
+
+    document
+      .body
+      .classList
+      .contains("dark")
+
+      ? "dark"
+      : "light"
+
+  );
 
 
-updateThemeButton();
-
-}
-
-
-function updateThemeButton(){
-
-document
-.getElementById("themeBtn")
-.textContent =
-document
-.body
-.classList
-.contains("dark")
-? "☀️"
-: "🌙";
+  updateTheme();
 
 }
 
 
-function loadTheme(){
+function updateTheme(){
+
+  document
+    .getElementById(
+      "themeBtn"
+    )
+    .textContent =
+
+      document
+        .body
+        .classList
+        .contains("dark")
+
+        ? "☀️"
+        : "🌙";
+
+}
+
 
 if(
-localStorage.getItem(
-"mediguideTheme"
-) === "dark"
+  localStorage.getItem(
+    "mediguideTheme"
+  ) === "dark"
 ){
 
-document.body
-.classList
-.add("dark");
+  document
+    .body
+    .classList
+    .add("dark");
 
 }
 
-updateThemeButton();
 
-}
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key === "Escape"){
+      closeModal();
+    }
 
 
-document
-.getElementById("symptoms")
-.addEventListener(
-"keydown",
-event=>{
+    if(
+      event.ctrlKey &&
+      event.key === "Enter" &&
+      document.activeElement &&
+      document.activeElement.id === "symptoms"
+    ){
 
-if(
-event.ctrlKey &&
-event.key === "Enter"
-){
+      analyzeSymptoms();
 
-analyzeSymptoms();
+    }
 
-}
-
-}
+  }
 );
 
-
-loadTheme();
 
 applyLanguage();
+updateTheme();
 
 </script>
 
